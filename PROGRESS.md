@@ -1,12 +1,12 @@
 # Westeel Dashboard Build Progress
 
 ## Current Task
-- **Task:** T0: Preflight (no application code)
-- **Status:** DONE (Awaiting `APPROVED T0`)
+- **Task:** T1: Scaffold
+- **Status:** DONE (Awaiting `APPROVED T1`)
 
 ## Overall Roadmap Status
 - [x] **T0: Preflight** - Environment verification, dependencies audit, decisions log, roadmap initialization
-- [ ] **T1: Scaffold** - Next.js, TypeScript, Tailwind, shadcn/ui, Supabase helpers, money utils, shells
+- [x] **T1: Scaffold** - Next.js, TypeScript, Tailwind, shadcn/ui helpers, Supabase helpers, money utils, layouts, `/api/health`
 - [ ] **T2: Database foundation** - Initial schema migration, RLS, audit log triggers, RLS tests
 - [ ] **T3: Authentication & employee management** - Auth flows, middleware guards, MFA, employee management
 - [ ] **T4: Projects, stages, members, milestones** - Projects CRUD, stages, milestones, delay detection
@@ -34,13 +34,25 @@
 - **Docker:** `29.1.3` (daemon active, non-root socket permission requires user group configuration)
 
 ## Package Versions (App)
-*(Not yet installed - to be populated during T1)*
-- Next.js: N/A
-- React: N/A
-- @supabase/supabase-js: N/A
-- @supabase/ssr: N/A
-- Tailwind CSS: N/A
+- **next:** `16.4.2`
+- **react:** `19.3.0`
+- **react-dom:** `19.3.0`
+- **@supabase/supabase-js:** `2.118.0`
+- **@supabase/ssr:** `0.12.7`
+- **tailwindcss:** `^4.0.0`
+- **@tailwindcss/turbopack:** `^4.0.0`
+- **lucide-react:** `^1.59.0`
+- **zod:** `^4.6.7`
+- **react-hook-form:** `^7.90.0`
+- **@hookform/resolvers:** `^5.9.2`
+- **date-fns:** `^4.4.0`
+- **clsx:** `^2.1.1`
+- **tailwind-merge:** `^3.7.0`
+- **class-variance-authority:** `^0.7.1`
+- **vitest:** `5.0.5`
+- **typescript:** `^5.0.0`
+- **eslint:** `^9.0.0`
 
 ## Known Issues / Environment Constraints
-1. **Docker Socket Permission:** Running local Docker commands as `honey_badger` requires permission to `/var/run/docker.sock` (user not currently in `docker` group). If local Supabase containerization is desired, run `sudo usermod -aG docker $USER` or use remote `westeel-dev` directly.
-2. **Git Repository Root:** The current working directory `/home/honey_badger/Code/Lab/westeel` is currently nested under a Git repository located at `/home/honey_badger`. An isolated Git repo should be initialized at `/home/honey_badger/Code/Lab/westeel` to avoid tracking unrelated home files.
+1. **Docker Socket Permission:** Local Docker requires membership in the `docker` group (`sudo usermod -aG docker honey_badger`) for local Supabase Docker instances. Direct remote Supabase integration (`westeel-dev`) is configured and functional via `@supabase/ssr` / `.env.local`.
+2. **Git Tracking Verification:** `.env.local` confirmed untracked and gitignored; `.env.example` committed with blank keys.

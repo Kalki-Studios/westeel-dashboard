@@ -23,6 +23,7 @@ Format: `Date | Decision | Reason`
 - **2026-10-17 | Sales meeting definition (A14) |** Follow-ups of kind `meeting` or `site_visit` count as attended meetings.
 - **2026-10-17 | Bank balances source (A15) |** Manual dated entries only; no live bank APIs.
 - **2026-10-17 | Lead sources and lost reasons (A16) |** Seeded from standard PEB defaults, editable by director.
+- **2026-10-18 | Minimal Root Landing & Obscured Admin Route |** User requested public landing page (`/`) display solely "Westeel Control Dashboard" without visible portal option cards. Admin portal accessed via direct URL `/x9admin` (rewritten to `/admin`). Employee portal accessed via direct URL `/employee`. Navigation links on public screens removed.
 
 ---
 
