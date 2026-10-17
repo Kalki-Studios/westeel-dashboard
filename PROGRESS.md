@@ -1,13 +1,13 @@
 # Westeel Dashboard Build Progress
 
 ## Current Task
-- **Task:** T1: Scaffold
-- **Status:** DONE (Awaiting `APPROVED T1`)
+- **Task:** T2: Database foundation
+- **Status:** DONE (Awaiting `APPROVED T2`)
 
 ## Overall Roadmap Status
 - [x] **T0: Preflight** - Environment verification, dependencies audit, decisions log, roadmap initialization
 - [x] **T1: Scaffold** - Next.js, TypeScript, Tailwind, shadcn/ui helpers, Supabase helpers, money utils, layouts, `/api/health`
-- [ ] **T2: Database foundation** - Initial schema migration, RLS, audit log triggers, RLS tests
+- [x] **T2: Database foundation** - Schema migration 001 applied to `westeel-dev`, enums, profiles, user_roles, audit_log, RLS policies, functions, RLS tests passed
 - [ ] **T3: Authentication & employee management** - Auth flows, middleware guards, MFA, employee management
 - [ ] **T4: Projects, stages, members, milestones** - Projects CRUD, stages, milestones, delay detection
 - [ ] **T5: Tasks and issues** - Task management, blockers, issue escalation
@@ -30,8 +30,8 @@
 - **npm:** `11.11.0`
 - **pnpm:** `11.15.0`
 - **Git:** `2.43.0`
-- **Supabase CLI:** `2.101.0`
-- **Docker:** `29.1.3` (daemon active, non-root socket permission requires user group configuration)
+- **Supabase CLI:** `2.101.0` (Linked to remote project `rooaitpvnvmjtytzaukk`)
+- **Docker:** `29.1.3`
 
 ## Package Versions (App)
 - **next:** `16.4.2`
@@ -54,5 +54,4 @@
 - **eslint:** `^9.0.0`
 
 ## Known Issues / Environment Constraints
-1. **Docker Socket Permission:** Local Docker requires membership in the `docker` group (`sudo usermod -aG docker honey_badger`) for local Supabase Docker instances. Direct remote Supabase integration (`westeel-dev`) is configured and functional via `@supabase/ssr` / `.env.local`.
-2. **Git Tracking Verification:** `.env.local` confirmed untracked and gitignored; `.env.example` committed with blank keys.
+- None. Database migration `001_database_foundation.sql` pushed to remote Supabase dev database (`westeel-dev`) and verified with automated test suite.
