@@ -24,6 +24,7 @@ Format: `Date | Decision | Reason`
 - **2026-10-17 | Bank balances source (A15) |** Manual dated entries only; no live bank APIs.
 - **2026-10-17 | Lead sources and lost reasons (A16) |** Seeded from standard PEB defaults, editable by director.
 - **2026-10-18 | Minimal Root Landing & Obscured Admin Route |** User requested public landing page (`/`) display solely "Westeel Control Dashboard" without visible portal option cards. Admin portal accessed via direct URL `/x9admin` (rewritten to `/admin`). Employee portal accessed via direct URL `/employee`. Navigation links on public screens removed.
+- **2026-10-18 | Employee Access: Role Passcode / PIN Entry |** Kalki selected role-based passcode entry for `/employee`. Entering the role's designated password directly unlocks that specific role's interface, displaying only General items + that role's individual work (Site Engineer, Sales, Accounts, or Purchase & PM), filtering out all other roles.
 
 ---
 
