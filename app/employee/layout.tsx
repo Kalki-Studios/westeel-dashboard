@@ -19,7 +19,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 
-type RoleKey = "site_engineer" | "sales" | "accounts" | "purchase_pm" | "all";
+type RoleKey = "site_engineer" | "sales" | "accounts" | "purchase_pm";
 
 interface RoleConfig {
   key: RoleKey;
@@ -47,11 +47,6 @@ const ROLES: RoleConfig[] = [
     key: "purchase_pm",
     label: "Purchase & PM",
     passcodes: ["purchase", "pm", "purchase2026", "pm2026"],
-  },
-  {
-    key: "all",
-    label: "Full Staff View",
-    passcodes: ["westeel", "westeel2026", "admin2026"],
   },
 ];
 
@@ -235,7 +230,7 @@ export default function EmployeeLayout({
   // UNLOCKED STATE: Filter sidebar to General + Matched Role Only
   const activeRoleConfig = ROLES.find((r) => r.key === currentRole);
   const visibleGroups = MODULE_GROUPS.filter(
-    (g) => g.role === "general" || g.role === currentRole || currentRole === "all"
+    (g) => g.role === "general" || g.role === currentRole
   );
 
   return (
