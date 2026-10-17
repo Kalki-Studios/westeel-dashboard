@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { logoutAction } from "@/lib/auth/actions";
+import { MfaEnrollmentBanner } from "./mfa-enrollment-banner";
 import {
   LayoutDashboard,
   Building2,
@@ -138,10 +140,19 @@ export default function AdminLayout({
             <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] bg-slate-800/80 border border-slate-700 text-slate-300 font-mono">
               IST (UTC+5:30)
             </span>
+            <form action={logoutAction}>
+              <button
+                type="submit"
+                className="text-xs px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 transition cursor-pointer"
+              >
+                Sign Out
+              </button>
+            </form>
           </div>
         </header>
 
-        <main className="flex-1 p-6 overflow-y-auto">
+        <main className="flex-1 p-6 overflow-y-auto space-y-6">
+          <MfaEnrollmentBanner />
           {children}
         </main>
       </div>

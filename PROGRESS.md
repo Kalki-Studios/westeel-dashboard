@@ -1,14 +1,14 @@
 # Westeel Dashboard Build Progress
 
 ## Current Task
-- **Task:** T2: Database foundation
-- **Status:** DONE (Awaiting `APPROVED T2`)
+- **Task:** T3: Authentication and employee management
+- **Status:** DONE (Awaiting `APPROVED T3`)
 
 ## Overall Roadmap Status
 - [x] **T0: Preflight** - Environment verification, dependencies audit, decisions log, roadmap initialization
 - [x] **T1: Scaffold** - Next.js, TypeScript, Tailwind, shadcn/ui helpers, Supabase helpers, money utils, layouts, `/api/health`
 - [x] **T2: Database foundation** - Schema migration 001 applied to `westeel-dev`, enums, profiles, user_roles, audit_log, RLS policies, functions, RLS tests passed
-- [ ] **T3: Authentication & employee management** - Auth flows, middleware guards, MFA, employee management
+- [x] **T3: Authentication & employee management** - Login, logout, password reset, middleware route guards, inactive user blocking, director TOTP MFA banner, admin employee CRUD screens with service-role security
 - [ ] **T4: Projects, stages, members, milestones** - Projects CRUD, stages, milestones, delay detection
 - [ ] **T5: Tasks and issues** - Task management, blockers, issue escalation
 - [ ] **T6: Documents core & drawing approvals** - Storage bucket, revisions, drawing review workflow
@@ -49,9 +49,10 @@
 - **clsx:** `^2.1.1`
 - **tailwind-merge:** `^3.7.0`
 - **class-variance-authority:** `^0.7.1`
+- **server-only:** `^0.0.1`
 - **vitest:** `5.0.5`
 - **typescript:** `^5.0.0`
 - **eslint:** `^9.0.0`
 
 ## Known Issues / Environment Constraints
-- None. Database migration `001_database_foundation.sql` pushed to remote Supabase dev database (`westeel-dev`) and verified with automated test suite.
+- None. Task T3 authentication flows, middleware route guards, and employee directory management verified with 3 live accounts on remote Supabase dev database.
