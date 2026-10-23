@@ -1,18 +1,36 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
 
-/** Sidebar is a slide-in drawer below md, static column from md up. */
+const dockItem = "flex flex-col items-center gap-0.5 min-w-16 px-3 py-1.5 rounded-full text-[10px] font-semibold cursor-pointer";
+
+/** Mobile dock link; highlights when its page is open. */
+export function DockLink({ href, label, exact, children }: { href: string; label: string; exact?: boolean; children: React.ReactNode }) {
+  const path = usePathname();
+  const active = path === href || (!exact && path.startsWith(href + "/"));
+  return (
+    <Link href={href} className={`${dockItem} ${active ? "bg-white/70 text-blue-600" : "text-slate-700"}`}>
+      {children}
+      <span>{label}</span>
+    </Link>
+  );
+}
+
+/** Sidebar is a slide-in drawer below md, static column from md up. Optional dock = mobile bottom bar. */
 export function AppShell({
   sidebar,
   header,
   actions,
+  dock,
   children,
 }: {
   sidebar: React.ReactNode;
   header: React.ReactNode;
   actions: React.ReactNode;
+  dock?: React.ReactNode;
   children: React.ReactNode;
 }) {
   const [open, setOpen] = useState(false);
@@ -21,7 +39,7 @@ export function AppShell({
     <div className="h-dvh overflow-hidden glass-canvas flex p-2 md:p-5 gap-5 relative">
       {open && (
         <div
-          className="fixed inset-0 z-40 bg-slate-900/40 md:hidden"
+          className="fixed inset-0 z-40 drawer-scrim md:hidden"
           onClick={() => setOpen(false)}
         />
       )}
@@ -42,7 +60,7 @@ export function AppShell({
               onClick={() => setOpen(true)}
               aria-label="Open menu"
               aria-expanded={open}
-              className="md:hidden -ml-1 p-2 rounded-lg text-slate-800 hover:bg-white/50 cursor-pointer"
+              className={`${dock ? "hidden" : "md:hidden"} -ml-1 p-2 rounded-lg text-slate-800 hover:bg-white/50 cursor-pointer`}
             >
               <Menu className="w-5 h-5" strokeWidth={2.25} />
             </button>
@@ -51,10 +69,20 @@ export function AppShell({
           <div className="flex items-center gap-2 md:gap-3 shrink-0">{actions}</div>
         </header>
 
-        <main className="flex-1 min-h-0 overflow-y-auto space-y-4 md:space-y-6 pb-8 md:pr-1">
+        <main className={`flex-1 min-h-0 overflow-y-auto overflow-x-hidden space-y-4 md:space-y-6 ${dock ? "pb-24" : "pb-8"} md:pb-8 md:pr-1`}>
           {children}
         </main>
       </div>
+
+      {dock && (
+        <nav className="md:hidden fixed bottom-3 inset-x-0 mx-auto w-fit z-30 glass-panel dock-glass rounded-full p-1.5 flex items-center gap-1">
+          <button type="button" onClick={() => setOpen(true)} aria-label="Open menu" className={`${dockItem} text-slate-700`}>
+            <Menu className="w-5 h-5" />
+            <span>Menu</span>
+          </button>
+          {dock}
+        </nav>
+      )}
     </div>
   );
 }

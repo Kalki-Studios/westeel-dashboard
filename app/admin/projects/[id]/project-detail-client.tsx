@@ -912,7 +912,7 @@ export function ProjectDetailClient({
                 setRevisionDoc(null);
                 setIsUploadDocModalOpen(true);
               }}
-              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold text-xs tracking-wide transition shadow-lg shadow-amber-500/10 cursor-pointer shrink-0"
+              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs tracking-wide transition shadow-md shadow-blue-600/25 cursor-pointer shrink-0"
             >
               <Upload className="w-4 h-4" />
               <span>Upload File for this Project</span>
@@ -1176,7 +1176,7 @@ export function ProjectDetailClient({
                 <button
                   type="submit"
                   disabled={isSubmittingMilestone}
-                  className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold text-xs disabled:opacity-50"
+                  className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs disabled:opacity-50"
                 >
                   {isSubmittingMilestone && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   <span>Add Milestone</span>
@@ -1298,7 +1298,7 @@ export function ProjectDetailClient({
                 <button
                   type="submit"
                   disabled={isSubmittingMilestone}
-                  className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold text-xs disabled:opacity-50"
+                  className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs disabled:opacity-50"
                 >
                   {isSubmittingMilestone && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   <span>Save Milestone</span>
@@ -1376,7 +1376,7 @@ export function ProjectDetailClient({
                 <button
                   type="submit"
                   disabled={isSubmittingMember}
-                  className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold text-xs disabled:opacity-50"
+                  className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs disabled:opacity-50"
                 >
                   {isSubmittingMember && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   <span>Assign to Project</span>
@@ -1476,7 +1476,7 @@ export function ProjectDetailClient({
                 <button
                   type="submit"
                   disabled={isSubmittingDoc}
-                  className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold text-xs disabled:opacity-50"
+                  className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs disabled:opacity-50"
                 >
                   {isSubmittingDoc && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   <span>{revisionDoc ? "Upload Revision" : "Upload File"}</span>

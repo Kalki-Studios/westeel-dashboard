@@ -419,10 +419,9 @@ button.rounded-xl.border:hover {
 /* ========================================================
    SCROLLBAR
    ======================================================== */
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--c-border-strong); border-radius: 9999px; }
-::-webkit-scrollbar-thumb:hover { background: var(--c-grey); }
+/* scrollbars hidden everywhere; scrolling still works */
+* { scrollbar-width: none; }
+*::-webkit-scrollbar { display: none; }
 
 /* ========================================================
    LIGHT THEME CONTRAST & ACCENT TEXT MAPPINGS
@@ -652,10 +651,45 @@ button[class*="bg-red-600"] * {
 /* ponytail: one rule for ~90 plain bg-white boxes; swap to .glass per component if any needs to stay opaque */
 .glass-canvas .bg-white { background: rgba(255,255,255,0.55); }
 
-/* Mobile: opaque drawer for legibility; 16px inputs stop iOS focus-zoom */
+/* Mobile drawer scrim: own class because the global bg-slate-900 -> white and 8px overlay-blur rules would flatten it */
+.drawer-scrim {
+  background:
+    radial-gradient(circle at 20% 15%, rgba(59,130,246,0.55), transparent 50%),
+    radial-gradient(circle at 85% 85%, rgba(249,115,22,0.5), transparent 50%),
+    rgba(15,23,42,0.35);
+  backdrop-filter: blur(56px) saturate(170%);
+  -webkit-backdrop-filter: blur(56px) saturate(170%);
+}
+
+/* Bottom dock: clearer frosted glass than the other panels */
+nav.dock-glass {
+  background: linear-gradient(135deg, rgba(255,255,255,0.45), rgba(255,255,255,0.15)) !important;
+  backdrop-filter: blur(40px) saturate(200%);
+  -webkit-backdrop-filter: blur(40px) saturate(200%);
+  border: 1px solid rgba(255,255,255,0.7) !important;
+  box-shadow: 0 12px 40px rgba(15,23,42,0.18), inset 0 1px 0 rgba(255,255,255,0.9) !important;
+}
+
+/* Mobile: frosted drawer; 16px inputs stop iOS focus-zoom */
 @media (max-width: 767px) {
-  .glass-sidebar { background: rgba(255,255,255,0.94) !important; }
+  aside.glass-sidebar {
+    background-color: #ffffff !important;
+    background-image: linear-gradient(160deg, #eef4ff 0%, #ffffff 45%, #fff1e8 100%) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: 1px solid #ffffff !important;
+    border-radius: 1.5rem;
+    box-shadow: 0 20px 60px rgba(15,23,42,0.30) !important;
+  }
+  .glass-sidebar .border-slate-100 { border-color: #e2e8f0; }
+  .glass-sidebar a, .glass-sidebar span { color: #0f172a; }
+  .glass-sidebar a:active { background: #eef2f7; }
   input, select, textarea { font-size: 16px !important; }
+  /* page-level add button becomes a round icon button, bottom-right above the dock */
+  .fab { position: fixed; right: 1rem; bottom: 5.5rem; z-index: 35; width: 3.5rem; height: 3.5rem; padding: 0 !important; justify-content: center; border-radius: 9999px; font-size: 0 !important; box-shadow: 0 10px 28px rgba(37,99,235,0.45); }
+  button.fab, a.fab { font-size: 0 !important; }
+  .fab span { display: none; }
+  .fab svg { width: 1.5rem; height: 1.5rem; }
 }
 
 /* Modals: overlay scrolls when a form is taller than the screen; short ones stay centered via auto margin */

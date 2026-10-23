@@ -293,7 +293,7 @@ export function AccountsInvoicesClient({
               setFormError(null);
               setIsRaiseInvoiceOpen(true);
             }}
-            className="px-4 py-1.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-md shadow-blue-600/25"
+            className="fab px-4 py-1.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-md shadow-blue-600/25"
           >
             <Plus className="w-4 h-4" />
             <span>Raise Invoice</span>
@@ -1001,7 +1001,7 @@ export function AccountsInvoicesClient({
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-4 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold transition flex items-center gap-1.5"
+                  className="px-4 py-1.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition flex items-center gap-1.5"
                 >
                   {isSubmitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   <span>Allocate Advance</span>

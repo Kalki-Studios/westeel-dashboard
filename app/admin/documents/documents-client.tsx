@@ -167,7 +167,7 @@ export function DocumentsClient({ initialDocuments, projects }: DocumentsClientP
             setRevisionDoc(null);
             setIsUploadModalOpen(true);
           }}
-          className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold text-xs tracking-wide transition shadow-lg shadow-amber-500/10 cursor-pointer"
+          className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs tracking-wide transition shadow-md shadow-blue-600/25 cursor-pointer"
         >
           <Upload className="w-4 h-4" />
           <span>Upload Document</span>
@@ -543,7 +543,7 @@ export function DocumentsClient({ initialDocuments, projects }: DocumentsClientP
                   name="file"
                   type="file"
                   required
-                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-slate-300 file:mr-3 file:py-1 file:px-2.5 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-amber-500 file:text-slate-950 hover:file:bg-amber-400 cursor-pointer"
+                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-full text-xs text-slate-300 file:mr-3 file:py-1 file:px-2.5 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-amber-400 cursor-pointer"
                 />
               </div>
 
@@ -562,7 +562,7 @@ export function DocumentsClient({ initialDocuments, projects }: DocumentsClientP
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold text-xs disabled:opacity-50"
+                  className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs disabled:opacity-50"
                 >
                   {isSubmitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   <span>Upload &amp; Save</span>

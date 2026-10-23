@@ -95,7 +95,7 @@ export function ProjectsClient({ initialProjects, stages }: ProjectsClientProps)
             setFormError(null);
             setIsCreateModalOpen(true);
           }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs tracking-wide transition shadow-md shadow-blue-600/25 cursor-pointer"
+          className="fab inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs tracking-wide transition shadow-md shadow-blue-600/25 cursor-pointer"
         >
           <Plus className="w-4 h-4" />
           <span>New Project</span>
@@ -158,11 +158,11 @@ export function ProjectsClient({ initialProjects, stages }: ProjectsClientProps)
           />
         </div>
 
-        <div className="flex gap-2 shrink-0">
+        <div className="flex gap-2 md:shrink-0">
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-3 py-2 bg-slate-900/80 border border-slate-800 rounded-lg text-xs text-slate-300 focus:outline-none focus:border-amber-500/50 cursor-pointer"
+            className="min-w-0 flex-1 px-3 py-2 bg-slate-900/80 border border-slate-800 rounded-lg text-xs text-slate-300 focus:outline-none focus:border-amber-500/50 cursor-pointer"
           >
             <option value="all">All Statuses</option>
             <option value="delayed">Delayed Only</option>
@@ -175,7 +175,7 @@ export function ProjectsClient({ initialProjects, stages }: ProjectsClientProps)
           <select
             value={stageFilter}
             onChange={(e) => setStageFilter(e.target.value)}
-            className="px-3 py-2 bg-slate-900/80 border border-slate-800 rounded-lg text-xs text-slate-300 focus:outline-none focus:border-amber-500/50 cursor-pointer"
+            className="min-w-0 flex-1 px-3 py-2 bg-slate-900/80 border border-slate-800 rounded-lg text-xs text-slate-300 focus:outline-none focus:border-amber-500/50 cursor-pointer"
           >
             <option value="all">All Stages</option>
             {stages.map((s) => (
@@ -453,7 +453,7 @@ export function ProjectsClient({ initialProjects, stages }: ProjectsClientProps)
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold text-xs transition disabled:opacity-50"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs transition disabled:opacity-50"
                 >
                   {isSubmitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   <span>Generate Code & Create</span>

@@ -780,7 +780,7 @@ export function BillingTab({
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-4 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold"
+                  className="px-4 py-1.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-bold"
                 >
                   Save Value
                 </button>
@@ -856,7 +856,7 @@ export function BillingTab({
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-4 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold"
+                  className="px-4 py-1.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-bold"
                 >
                   Add Variation
                 </button>
@@ -930,7 +930,7 @@ export function BillingTab({
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-4 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold"
+                  className="px-4 py-1.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-bold"
                 >
                   Create Milestone
                 </button>

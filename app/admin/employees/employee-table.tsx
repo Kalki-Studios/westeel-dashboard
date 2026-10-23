@@ -166,7 +166,7 @@ export function EmployeeTable({ initialEmployees }: EmployeeTableProps) {
             resetAddForm();
             setIsAddOpen(true);
           }}
-          className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold text-xs transition shadow-sm cursor-pointer shrink-0"
+          className="fab inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs transition shadow-md shadow-blue-600/25 cursor-pointer shrink-0"
         >
           <UserPlus className="w-4 h-4" />
           <span>Add Employee</span>
@@ -431,7 +431,7 @@ export function EmployeeTable({ initialEmployees }: EmployeeTableProps) {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 disabled:opacity-50 text-slate-950 font-semibold text-xs transition flex items-center gap-1.5 cursor-pointer"
+                  className="px-4 py-2 rounded-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold text-xs transition flex items-center gap-1.5 cursor-pointer"
                 >
                   {isSubmitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   <span>{isSubmitting ? "Creating..." : "Save Employee"}</span>
@@ -444,7 +444,7 @@ export function EmployeeTable({ initialEmployees }: EmployeeTableProps) {
 
       {/* EDIT EMPLOYEE MODAL */}
       {editingEmployee && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm animate-in fade-in duration-150 flex items-center justify-center p-4">
           <div className="w-full max-w-lg rounded-xl border border-slate-800 bg-slate-900 p-6 space-y-5 shadow-2xl">
             <div className="flex items-center justify-between pb-3 border-b border-slate-800">
               <h2 className="text-sm font-semibold text-slate-100 flex items-center gap-2">
@@ -487,6 +487,34 @@ export function EmployeeTable({ initialEmployees }: EmployeeTableProps) {
                 </div>
                 <div className="space-y-1">
                   <label className="text-[11px] font-semibold text-slate-300">
+                    Username or Email ID
+                  </label>
+                  <input
+                    type="text"
+                    value={editEmail}
+                    onChange={(e) => setEditEmail(e.target.value)}
+                    placeholder="e.g. sales1 or sales1@westeel.test"
+                    className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-slate-100 text-xs focus:outline-none focus:border-amber-500"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <label className="text-[11px] font-semibold text-slate-300">
+                    New Password (Optional)
+                  </label>
+                  <input
+                    type="password"
+                    minLength={6}
+                    value={editPassword}
+                    onChange={(e) => setEditPassword(e.target.value)}
+                    placeholder="Leave blank to keep current"
+                    className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-slate-100 text-xs focus:outline-none focus:border-amber-500"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[11px] font-semibold text-slate-300">
                     Phone
                   </label>
                   <input
@@ -518,34 +546,6 @@ export function EmployeeTable({ initialEmployees }: EmployeeTableProps) {
                   }
                   className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-slate-100 text-xs focus:outline-none focus:border-amber-500"
                 />
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div className="space-y-1">
-                  <label className="text-[11px] font-semibold text-slate-300">
-                    Username or Email ID
-                  </label>
-                  <input
-                    type="text"
-                    value={editEmail}
-                    onChange={(e) => setEditEmail(e.target.value)}
-                    placeholder="e.g. sales1 or sales1@westeel.test"
-                    className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-slate-100 text-xs focus:outline-none focus:border-amber-500"
-                  />
-                </div>
-                <div className="space-y-1">
-                  <label className="text-[11px] font-semibold text-slate-300">
-                    New Password (Optional)
-                  </label>
-                  <input
-                    type="password"
-                    minLength={6}
-                    value={editPassword}
-                    onChange={(e) => setEditPassword(e.target.value)}
-                    placeholder="Leave blank to keep current"
-                    className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-slate-100 text-xs focus:outline-none focus:border-amber-500"
-                  />
-                </div>
               </div>
 
               <div className="space-y-1 pt-1">
@@ -580,7 +580,7 @@ export function EmployeeTable({ initialEmployees }: EmployeeTableProps) {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 disabled:opacity-50 text-slate-950 font-semibold text-xs transition flex items-center gap-1.5 cursor-pointer"
+                  className="px-4 py-2 rounded-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold text-xs transition flex items-center gap-1.5 cursor-pointer"
                 >
                   {isSubmitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   <span>{isSubmitting ? "Updating..." : "Save Changes"}</span>

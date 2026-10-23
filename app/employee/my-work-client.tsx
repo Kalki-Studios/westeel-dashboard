@@ -312,7 +312,7 @@ export function EmployeeMyWorkClient({
                   </div>
                   <Link
                     href={`/employee/site-report?edit=${cr.id}`}
-                    className="px-3 py-1.5 rounded-lg bg-amber-500 text-slate-950 font-bold hover:bg-amber-400 transition self-start sm:self-auto text-xs"
+                    className="px-3 py-1.5 rounded-full bg-blue-600 text-white font-bold hover:bg-blue-700 transition self-start sm:self-auto text-xs"
                   >
                     Edit &amp; Resubmit
                   </Link>

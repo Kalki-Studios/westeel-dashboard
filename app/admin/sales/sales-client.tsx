@@ -311,7 +311,7 @@ export function SalesWorkspaceClient({
           </button>
           <button
             onClick={() => setIsNewEnquiryOpen(true)}
-            className="px-4 py-2 text-xs font-semibold rounded-full bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-1.5 shadow-md shadow-blue-600/25 transition"
+            className="fab px-4 py-2 text-xs font-semibold rounded-full bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-1.5 shadow-md shadow-blue-600/25 transition"
           >
             <Plus className="w-4 h-4" />
             New Enquiry

@@ -64,7 +64,7 @@ export default function ResetPasswordPage() {
           <button
             type="submit"
             disabled={isPending}
-            className="w-full py-2.5 px-4 rounded-lg bg-amber-500 hover:bg-amber-400 disabled:opacity-50 text-slate-950 font-semibold text-xs transition flex items-center justify-center gap-2 shadow-md cursor-pointer mt-2"
+            className="w-full py-2.5 px-4 rounded-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold text-xs transition flex items-center justify-center gap-2 shadow-md cursor-pointer mt-2"
           >
             <span>{isPending ? "Sending Link..." : "Send Reset Link"}</span>
             <ArrowRight className="w-4 h-4" />

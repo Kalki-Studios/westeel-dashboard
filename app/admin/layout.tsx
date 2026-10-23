@@ -69,7 +69,7 @@ import { checkDirectorMfaStatus } from "@/lib/auth/actions";
 import { getSiteFlags } from "@/lib/settings/flags";
 import { Loader2 } from "lucide-react";
 import { AdminBreadcrumbs } from "./admin-breadcrumbs";
-import { AppShell } from "@/components/app-shell";
+import { AppShell, DockLink } from "@/components/app-shell";
 
 
 async function AdminLayoutContent({ children }: { children: React.ReactNode }) {
@@ -183,16 +183,16 @@ async function AdminLayoutContent({ children }: { children: React.ReactNode }) {
               <span className="w-2 h-2 rounded-full bg-emerald-500" />
               <span className="text-slate-700 font-semibold text-[11px]">Director</span>
             </div>
-            <Link
-              href="/employee"
-              className="text-[11px] text-orange-600 hover:text-orange-700 flex items-center gap-1 font-semibold"
-            >
-              <span>Field Ops</span>
-              <span>→</span>
-            </Link>
           </div>
         </div>
       </aside>
+      }
+      dock={
+        <>
+          <DockLink href="/x9admin" label="Overview" exact><LayoutDashboard className="w-5 h-5" /></DockLink>
+          <DockLink href="/x9admin/employees" label="Employees"><Users className="w-5 h-5" /></DockLink>
+          <DockLink href="/x9admin/settings" label="Settings"><Settings className="w-5 h-5" /></DockLink>
+        </>
       }
       header={<AdminBreadcrumbs />}
       actions={

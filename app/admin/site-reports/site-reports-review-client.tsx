@@ -156,7 +156,7 @@ export function SiteReportsReviewClient({
           />
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <select
             value={projectFilter}
             onChange={(e) => setProjectFilter(e.target.value)}
@@ -269,7 +269,7 @@ export function SiteReportsReviewClient({
                         setReviewNote(report.review_note || "");
                         setActionError(null);
                       }}
-                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition cursor-pointer shadow-sm shadow-amber-500/10"
+                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition cursor-pointer shadow-md shadow-blue-600/25"
                     >
                       <Check className="w-3.5 h-3.5" />
                       <span>{isReviewed ? "Re-Review" : "Review"}</span>

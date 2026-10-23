@@ -20,6 +20,7 @@ import {
   Settings,
   UserRound,
   Wrench,
+  Info,
   Layers,
   Plus,
   Edit2,
@@ -54,7 +55,7 @@ export function SettingsClient({
   const router = useRouter();
 
   // Active Tab
-  const [activeTab, setActiveTab] = useState<"account" | "costs" | "lead_sources" | "lost_reasons" | "developer">("account");
+  const [activeTab, setActiveTab] = useState<"account" | "costs" | "lead_sources" | "lost_reasons" | "developer" | "about">("account");
 
   // Create Modal State (Cost Categories)
   const [isCreateCategoryModalOpen, setIsCreateCategoryModalOpen] = useState(false);
@@ -230,7 +231,7 @@ export function SettingsClient({
   return (
     <div className="space-y-6">
       {/* HEADER */}
-      <div className="glass-panel p-6 rounded-2xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="glass-panel p-3 md:p-6 rounded-2xl flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700">
             <Settings className="w-5 h-5 text-slate-700" />
@@ -247,28 +248,31 @@ export function SettingsClient({
             {activeTab === "costs" && (
               <button
                 onClick={() => setIsCreateCategoryModalOpen(true)}
-                className="px-4 py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold flex items-center gap-1.5 shadow-md shadow-blue-600/25 transition"
+                aria-label="Add Cost Category"
+                className="w-9 h-9 md:w-auto md:h-auto justify-center md:px-4 md:py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold flex items-center gap-1.5 shadow-md shadow-blue-600/25 transition"
               >
                 <Plus className="w-4 h-4" />
-                <span>Add Cost Category</span>
+                <span className="hidden md:inline">Add Cost Category</span>
               </button>
             )}
             {activeTab === "lead_sources" && (
               <button
                 onClick={() => setIsCreateSourceModalOpen(true)}
-                className="px-4 py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold flex items-center gap-1.5 shadow-md shadow-blue-600/25 transition"
+                aria-label="Add Lead Source"
+                className="w-9 h-9 md:w-auto md:h-auto justify-center md:px-4 md:py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold flex items-center gap-1.5 shadow-md shadow-blue-600/25 transition"
               >
                 <Plus className="w-4 h-4" />
-                <span>Add Lead Source</span>
+                <span className="hidden md:inline">Add Lead Source</span>
               </button>
             )}
             {activeTab === "lost_reasons" && (
               <button
                 onClick={() => setIsCreateReasonModalOpen(true)}
-                className="px-4 py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold flex items-center gap-1.5 shadow-md shadow-blue-600/25 transition"
+                aria-label="Add Lost Reason"
+                className="w-9 h-9 md:w-auto md:h-auto justify-center md:px-4 md:py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold flex items-center gap-1.5 shadow-md shadow-blue-600/25 transition"
               >
                 <Plus className="w-4 h-4" />
-                <span>Add Lost Reason</span>
+                <span className="hidden md:inline">Add Lost Reason</span>
               </button>
             )}
           </div>
@@ -306,10 +310,10 @@ export function SettingsClient({
       )}
 
       {/* TABS */}
-      <div className="flex flex-wrap items-center gap-2 border-b border-slate-200 pb-2">
+      <div className="flex items-center gap-2 border-b border-slate-200 pb-2 overflow-x-auto">
         <button
           onClick={() => setActiveTab("account")}
-          className={`px-4 py-2 text-xs font-semibold rounded-xl flex items-center gap-2 transition ${
+          className={`shrink-0 whitespace-nowrap px-4 py-2 text-xs font-semibold rounded-xl flex items-center gap-2 transition ${
             activeTab === "account"
               ? "bg-blue-600 text-white shadow-sm"
               : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
@@ -321,7 +325,7 @@ export function SettingsClient({
 
         <button
           onClick={() => setActiveTab("costs")}
-          className={`px-4 py-2 text-xs font-semibold rounded-xl flex items-center gap-2 transition ${
+          className={`shrink-0 whitespace-nowrap px-4 py-2 text-xs font-semibold rounded-xl flex items-center gap-2 transition ${
             activeTab === "costs"
               ? "bg-blue-600 text-white shadow-sm"
               : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
@@ -333,7 +337,7 @@ export function SettingsClient({
 
         <button
           onClick={() => setActiveTab("lead_sources")}
-          className={`px-4 py-2 text-xs font-semibold rounded-xl flex items-center gap-2 transition ${
+          className={`shrink-0 whitespace-nowrap px-4 py-2 text-xs font-semibold rounded-xl flex items-center gap-2 transition ${
             activeTab === "lead_sources"
               ? "bg-blue-600 text-white shadow-sm"
               : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
@@ -345,7 +349,7 @@ export function SettingsClient({
 
         <button
           onClick={() => setActiveTab("lost_reasons")}
-          className={`px-4 py-2 text-xs font-semibold rounded-xl flex items-center gap-2 transition ${
+          className={`shrink-0 whitespace-nowrap px-4 py-2 text-xs font-semibold rounded-xl flex items-center gap-2 transition ${
             activeTab === "lost_reasons"
               ? "bg-blue-600 text-white shadow-sm"
               : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
@@ -357,7 +361,7 @@ export function SettingsClient({
 
         <button
           onClick={() => setActiveTab("developer")}
-          className={`px-4 py-2 text-xs font-semibold rounded-xl flex items-center gap-2 transition ${
+          className={`shrink-0 whitespace-nowrap px-4 py-2 text-xs font-semibold rounded-xl flex items-center gap-2 transition ${
             activeTab === "developer"
               ? "bg-blue-600 text-white shadow-sm"
               : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
@@ -366,10 +370,44 @@ export function SettingsClient({
           <Wrench className="w-3.5 h-3.5" />
           <span>Developer</span>
         </button>
+        <button
+          onClick={() => setActiveTab("about")}
+          className={`shrink-0 whitespace-nowrap px-4 py-2 text-xs font-semibold rounded-xl flex items-center gap-2 transition ${
+            activeTab === "about"
+              ? "bg-blue-600 text-white shadow-sm"
+              : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+          }`}
+        >
+          <Info className="w-3.5 h-3.5" />
+          <span>About</span>
+        </button>
       </div>
 
       {activeTab === "developer" && (
         <DeveloperMode underConstruction={flags.underConstruction} mfaOffUntil={flags.mfaOffUntil} />
+      )}
+
+      {activeTab === "about" && (
+        <div className="glass-panel rounded-2xl p-5 md:p-6 space-y-4 text-sm text-slate-700">
+          <div>
+            <h2 className="text-base font-semibold text-slate-900">Westeel Buildings dashboard</h2>
+            <p className="text-xs text-slate-500">Version 1.1</p>
+          </div>
+          <p>
+            One place for the director to assign work to the team and follow it up from anywhere. Employees log in
+            separately at /employee and see only their own work.
+          </p>
+          <ul className="space-y-2 list-disc pl-5">
+            <li><b>Projects</b>: stages, milestones, documents, vendor orders and billing for each site.</li>
+            <li><b>Tasks &amp; issues</b>: assign, track and close work; blocked and overdue items are flagged.</li>
+            <li><b>Site reports</b>: daily reports from engineers, reviewed here.</li>
+            <li><b>Collections, payables and cash flow</b>: money in and out, kept in rupees; visible only to you and Accounts.</li>
+            <li><b>Sales tracker</b>: enquiries, customers, meetings, quotes and won or lost deals.</li>
+            <li><b>Employees</b>: create logins, set one role each, deactivate when someone leaves.</li>
+            <li><b>Alerts and audit log</b>: delays and a record of who did what.</li>
+          </ul>
+          <p className="text-xs text-slate-500">Dates and times are in IST. Sign-in is protected by Google Authenticator.</p>
+        </div>
       )}
 
       {activeTab === "account" && (
