@@ -247,7 +247,7 @@ export function SettingsClient({
             {activeTab === "costs" && (
               <button
                 onClick={() => setIsCreateCategoryModalOpen(true)}
-                className="px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold flex items-center gap-1.5 shadow-sm transition"
+                className="px-4 py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold flex items-center gap-1.5 shadow-md shadow-blue-600/25 transition"
               >
                 <Plus className="w-4 h-4" />
                 <span>Add Cost Category</span>
@@ -256,7 +256,7 @@ export function SettingsClient({
             {activeTab === "lead_sources" && (
               <button
                 onClick={() => setIsCreateSourceModalOpen(true)}
-                className="px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold flex items-center gap-1.5 shadow-sm transition"
+                className="px-4 py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold flex items-center gap-1.5 shadow-md shadow-blue-600/25 transition"
               >
                 <Plus className="w-4 h-4" />
                 <span>Add Lead Source</span>
@@ -265,7 +265,7 @@ export function SettingsClient({
             {activeTab === "lost_reasons" && (
               <button
                 onClick={() => setIsCreateReasonModalOpen(true)}
-                className="px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold flex items-center gap-1.5 shadow-sm transition"
+                className="px-4 py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold flex items-center gap-1.5 shadow-md shadow-blue-600/25 transition"
               >
                 <Plus className="w-4 h-4" />
                 <span>Add Lost Reason</span>

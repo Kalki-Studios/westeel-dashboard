@@ -165,7 +165,7 @@ export function EmployeeEnquiriesClient({
           </Link>
           {canAddLeads && <button
             onClick={() => setIsNewEnquiryOpen(true)}
-            className="px-3.5 py-2 text-xs font-semibold rounded-xl bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-1.5 shadow-sm transition"
+            className="px-4 py-2 text-xs font-semibold rounded-full bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-1.5 shadow-md shadow-blue-600/25 transition"
           >
             <Plus className="w-4 h-4" />
             <span>New Enquiry</span>
@@ -699,7 +699,7 @@ export function EmployeeEnquiriesClient({
                 <button
                   type="submit"
                   disabled={isPending}
-                  className="px-5 py-2 text-xs font-bold rounded-xl bg-orange-600 hover:bg-orange-700 text-white flex items-center gap-1.5"
+                  className="px-5 py-2 text-xs font-bold rounded-full bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-1.5"
                 >
                   {isPending && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   <span>Save Log (&lt;10s)</span>

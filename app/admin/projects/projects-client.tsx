@@ -95,7 +95,7 @@ export function ProjectsClient({ initialProjects, stages }: ProjectsClientProps)
             setFormError(null);
             setIsCreateModalOpen(true);
           }}
-          className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold text-xs tracking-wide transition shadow-lg shadow-amber-500/10 cursor-pointer"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs tracking-wide transition shadow-md shadow-blue-600/25 cursor-pointer"
         >
           <Plus className="w-4 h-4" />
           <span>New Project</span>

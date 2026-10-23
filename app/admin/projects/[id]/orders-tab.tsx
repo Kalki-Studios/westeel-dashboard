@@ -667,7 +667,7 @@ export function OrdersTab({
             {canManageOrders && (
               <button
                 onClick={() => setIsCreateOrderModalOpen(true)}
-                className="px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer shadow-lg shadow-amber-500/10"
+                className="px-4 py-1.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer shadow-md shadow-blue-600/25"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Create Vendor Order</span>
@@ -842,7 +842,7 @@ export function OrdersTab({
             {canManageBills && (
               <button
                 onClick={() => setIsCreateBillModalOpen(true)}
-                className="px-3.5 py-1.5 rounded-xl bg-indigo-500 hover:bg-indigo-400 text-white text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer shadow-lg shadow-indigo-500/10"
+                className="px-4 py-1.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer shadow-md shadow-blue-600/25"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Enter Bill / Expense</span>
@@ -1026,7 +1026,7 @@ export function OrdersTab({
 
       {/* 1. EDIT BUDGET MODAL (Director Only) */}
       {isBudgetModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl">
             <div className="p-5 border-b border-slate-800 flex items-center justify-between">
               <div>
@@ -1139,7 +1139,7 @@ export function OrdersTab({
 
       {/* 2. CREATE VENDOR ORDER MODAL */}
       {isCreateOrderModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl">
             <div className="p-5 border-b border-slate-800 flex items-center justify-between">
               <div>
@@ -1362,7 +1362,7 @@ export function OrdersTab({
 
       {/* 3. UPDATE ORDER STATUS & DELIVERY MODAL */}
       {isUpdateOrderModalOpen && selectedOrderForUpdate && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden">
             <div className="p-5 border-b border-slate-800 flex items-center justify-between">
               <div>
@@ -1461,7 +1461,7 @@ export function OrdersTab({
 
       {/* 4. ENTER BILL / EXPENSE MODAL */}
       {isCreateBillModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl">
             <div className="p-5 border-b border-slate-800 flex items-center justify-between">
               <div>
@@ -1688,7 +1688,7 @@ export function OrdersTab({
 
       {/* 5. RECORD BILL PAYMENT MODAL */}
       {isRecordPaymentModalOpen && selectedBillForPayment && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden">
             <div className="p-5 border-b border-slate-800 flex items-center justify-between">
               <div>
@@ -1871,7 +1871,7 @@ export function OrdersTab({
 
       {/* 6. ATTACH DOCUMENT MODAL */}
       {isAttachDocModalOpen && docTarget && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden">
             <div className="p-5 border-b border-slate-800 flex items-center justify-between">
               <div>

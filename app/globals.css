@@ -226,17 +226,17 @@ input, select, textarea {
    BUTTONS
    ======================================================== */
 .btn-spatial-orange {
-  background: var(--c-orange);
+  background: var(--c-blue);
   color: #ffffff;
   font-weight: 600;
-  border: 1px solid rgba(234,88,12,0.5);
-  box-shadow: 0 1px 3px rgba(234,88,12,0.25);
-  border-radius: var(--radius-md);
+  border: 1px solid rgba(29,78,216,0.4);
+  box-shadow: 0 2px 6px rgba(29,78,216,0.25);
+  border-radius: 9999px;
   transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
 }
 .btn-spatial-orange:hover {
-  background: #c2410c;
-  box-shadow: 0 4px 10px rgba(234,88,12,0.3);
+  background: #1e40af;
+  box-shadow: 0 4px 10px rgba(29,78,216,0.3);
   transform: translateY(-1px);
 }
 
@@ -245,8 +245,8 @@ input, select, textarea {
   color: #ffffff;
   font-weight: 600;
   border: 1px solid rgba(29,78,216,0.4);
-  box-shadow: 0 1px 3px rgba(29,78,216,0.2);
-  border-radius: var(--radius-md);
+  box-shadow: 0 2px 6px rgba(29,78,216,0.25);
+  border-radius: 9999px;
   transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
 }
 .btn-spatial-blue:hover {

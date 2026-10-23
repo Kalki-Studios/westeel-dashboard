@@ -277,7 +277,7 @@ export function OrdersClient({
         {canManageOrders && (
           <button
             onClick={() => setIsCreateModalOpen(true)}
-            className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-semibold flex items-center gap-2 transition cursor-pointer self-start sm:self-auto shadow-lg shadow-amber-500/10"
+            className="px-4 py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold flex items-center gap-2 transition cursor-pointer self-start sm:self-auto shadow-md shadow-blue-600/25"
           >
             <Plus className="w-4 h-4" />
             <span>Create Vendor Order</span>
@@ -538,7 +538,7 @@ export function OrdersClient({
 
       {/* CREATE ORDER MODAL */}
       {isCreateModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl">
             <div className="p-5 border-b border-slate-800 flex items-center justify-between">
               <div>
@@ -768,7 +768,7 @@ export function OrdersClient({
 
       {/* UPDATE ORDER MODAL */}
       {isUpdateModalOpen && selectedOrderForUpdate && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden">
             <div className="p-5 border-b border-slate-800 flex items-center justify-between">
               <div>

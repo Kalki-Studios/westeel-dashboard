@@ -210,7 +210,7 @@ export function CashflowClient({ data }: CashflowClientProps) {
                 setFormError(null);
                 setShowBalanceModal(true);
               }}
-              className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-sm"
+              className="px-3 py-1.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-md shadow-blue-600/25"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Add Balance Entry</span>
@@ -223,7 +223,7 @@ export function CashflowClient({ data }: CashflowClientProps) {
                 setFormError(null);
                 setShowCashItemModal(true);
               }}
-              className="px-3 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-sm"
+              className="px-3 py-1.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-md shadow-blue-600/25"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Add Cash Item</span>
@@ -647,7 +647,7 @@ export function CashflowClient({ data }: CashflowClientProps) {
                     setFormError(null);
                     setShowBalanceModal(true);
                   }}
-                  className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-sm"
+                  className="px-3 py-1.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-md shadow-blue-600/25"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>New Balance Entry</span>
@@ -747,7 +747,7 @@ export function CashflowClient({ data }: CashflowClientProps) {
                       setFormError(null);
                       setShowCashItemModal(true);
                     }}
-                    className="px-3 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-semibold flex items-center gap-1.5 transition-colors shrink-0 shadow-sm"
+                    className="px-3 py-1.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold flex items-center gap-1.5 transition-colors shrink-0 shadow-md shadow-blue-600/25"
                   >
                     <Plus className="w-3.5 h-3.5" />
                     <span>Add Cash Item</span>

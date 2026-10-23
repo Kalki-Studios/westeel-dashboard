@@ -243,7 +243,7 @@ export function CollectionsClient({
               setFormError(null);
               setIsRecordReceiptOpen(true);
             }}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold transition shadow-sm"
+            className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition shadow-md shadow-blue-600/25"
           >
             <Plus className="w-4 h-4" />
             <span>Record Receipt</span>
@@ -651,7 +651,7 @@ export function CollectionsClient({
 
       {/* MODAL: RECORD RECEIPT */}
       {isRecordReceiptOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
           <div className="w-full max-w-lg bg-slate-900 border border-slate-800 rounded-2xl shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-150">
             <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800">
               <h2 className="text-sm font-bold text-slate-100 flex items-center gap-2">
@@ -829,7 +829,7 @@ export function CollectionsClient({
 
       {/* MODAL: ALLOCATE ADVANCE TO INVOICE */}
       {isAllocateAdvanceOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
           <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-150">
             <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800">
               <h2 className="text-sm font-bold text-slate-100 flex items-center gap-2">

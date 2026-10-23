@@ -105,7 +105,7 @@ export function EmployeeLoginGate({ initialError }: { initialError?: string }) {
           <button
             type="submit"
             disabled={isPending}
-            className="w-full py-3 px-5 rounded-xl btn-spatial-orange text-xs flex items-center justify-center gap-2 cursor-pointer font-bold disabled:opacity-50 mt-2"
+            className="w-full py-3 px-5 btn-spatial-orange text-xs flex items-center justify-center gap-2 cursor-pointer font-bold disabled:opacity-50 mt-2"
           >
             {isPending ? (
               <>

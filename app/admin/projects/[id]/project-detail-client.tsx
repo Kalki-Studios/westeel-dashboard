@@ -672,7 +672,7 @@ export function ProjectDetailClient({
 
               <button
                 onClick={() => setIsAddMilestoneModalOpen(true)}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-semibold transition cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Add Milestone</span>
@@ -828,7 +828,7 @@ export function ProjectDetailClient({
 
             <button
               onClick={() => setIsAssignMemberModalOpen(true)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-semibold transition cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition cursor-pointer"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Assign Member</span>

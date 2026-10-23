@@ -308,7 +308,7 @@ export function EmployeeTable({ initialEmployees }: EmployeeTableProps) {
 
       {/* CREATE EMPLOYEE MODAL */}
       {isAddOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm animate-in fade-in duration-150 flex items-center justify-center p-4">
           <div className="w-full max-w-lg rounded-xl border border-slate-800 bg-slate-900 p-6 space-y-5 shadow-2xl">
             <div className="flex items-center justify-between pb-3 border-b border-slate-800">
               <h2 className="text-sm font-semibold text-slate-100 flex items-center gap-2">
@@ -444,7 +444,7 @@ export function EmployeeTable({ initialEmployees }: EmployeeTableProps) {
 
       {/* EDIT EMPLOYEE MODAL */}
       {editingEmployee && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="w-full max-w-lg rounded-xl border border-slate-800 bg-slate-900 p-6 space-y-5 shadow-2xl">
             <div className="flex items-center justify-between pb-3 border-b border-slate-800">
               <h2 className="text-sm font-semibold text-slate-100 flex items-center gap-2">
@@ -593,7 +593,7 @@ export function EmployeeTable({ initialEmployees }: EmployeeTableProps) {
 
       {/* DELETE EMPLOYEE CONFIRMATION MODAL (GITHUB STYLE) */}
       {deleteTarget && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="w-full max-w-md rounded-xl border border-rose-900/40 bg-slate-900 p-6 space-y-4 shadow-2xl">
             <div className="flex items-center justify-between pb-3 border-b border-slate-800">
               <h2 className="text-sm font-semibold text-rose-400 flex items-center gap-2">

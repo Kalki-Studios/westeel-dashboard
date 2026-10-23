@@ -46,7 +46,7 @@ export function MyReportsClient({ initialReports }: MyReportsClientProps) {
 
         <Link
           href="/employee/site-report"
-          className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold text-xs transition shrink-0 cursor-pointer shadow-lg shadow-amber-500/10"
+          className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs transition shrink-0 cursor-pointer shadow-md shadow-blue-600/25"
         >
           <Plus className="w-4 h-4" />
           <span>New Daily Report</span>

@@ -268,7 +268,7 @@ export function EmployeeQuickLogClient({ enquiries }: EmployeeQuickLogClientProp
           <button
             type="submit"
             disabled={isPending || !selectedEnquiryId || !summary.trim()}
-            className="w-full py-3.5 px-4 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-bold text-sm shadow-md shadow-orange-600/20 flex items-center justify-center gap-2 transition disabled:opacity-50"
+            className="w-full py-3.5 px-4 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-md shadow-blue-600/25 flex items-center justify-center gap-2 transition disabled:opacity-50"
           >
             {isPending ? (
               <Loader2 className="w-5 h-5 animate-spin" />

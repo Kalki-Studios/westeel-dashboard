@@ -135,7 +135,7 @@ export function DirectorGate({ hasActiveMfa = false }: DirectorGateProps) {
               <button
                 type="submit"
                 disabled={isMfaLoginPending || codeValue.length !== 6}
-                className="w-full py-3.5 px-5 rounded-xl btn-spatial-orange text-xs transition flex items-center justify-center gap-2 cursor-pointer shadow-sm disabled:opacity-50"
+                className="w-full py-3.5 px-5 btn-spatial-orange text-xs transition flex items-center justify-center gap-2 cursor-pointer shadow-sm disabled:opacity-50"
               >
                 {isMfaLoginPending ? (
                   <>
@@ -271,7 +271,7 @@ export function DirectorGate({ hasActiveMfa = false }: DirectorGateProps) {
             <button
               type="submit"
               disabled={isPending}
-              className="w-full py-3.5 px-5 rounded-xl btn-spatial-orange text-xs transition flex items-center justify-center gap-2 cursor-pointer shadow-sm disabled:opacity-50"
+              className="w-full py-3.5 px-5 btn-spatial-orange text-xs transition flex items-center justify-center gap-2 cursor-pointer shadow-sm disabled:opacity-50"
             >
               <span>{isPending ? "Checking Credentials..." : "Unlock Director Portal"}</span>
               <ArrowRight className="w-4 h-4" />

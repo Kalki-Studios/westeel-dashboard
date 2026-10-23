@@ -75,24 +75,26 @@ import { AppShell } from "@/components/app-shell";
 async function AdminLayoutContent({ children }: { children: React.ReactNode }) {
   await connection();
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const [
+    {
+      data: { user },
+    },
+    flags,
+  ] = await Promise.all([supabase.auth.getUser(), getSiteFlags()]);
 
-  const mfaOff = !!(await getSiteFlags()).mfaOffUntil;
+  const mfaOff = !!flags.mfaOffUntil;
   let isDirector = false;
   let isAal2Verified = false;
   let mfaEnrolled = false;
 
   if (user) {
-    const { data: roles } = await supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", user.id);
+    const [{ data: roles }, { data: aal }] = await Promise.all([
+      supabase.from("user_roles").select("role").eq("user_id", user.id),
+      supabase.auth.mfa.getAuthenticatorAssuranceLevel(),
+    ]);
     isDirector = (roles || []).some((r) => r.role === "director");
 
     if (isDirector) {
-      const { data: aal } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
       const required = aal?.nextLevel === "aal2";
       // Not enrolled: let them through to the setup screen below; dashboard stays locked.
       // Developer switch "2FA off": neither the code check nor the setup lock applies.

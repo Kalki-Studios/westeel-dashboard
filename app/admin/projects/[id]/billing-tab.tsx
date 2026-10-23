@@ -296,7 +296,7 @@ export function BillingTab({
 
                 <button
                   onClick={() => setIsAddVariationModalOpen(true)}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold transition shadow-sm"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition shadow-md shadow-blue-600/25"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>Add Variation Order</span>
@@ -422,7 +422,7 @@ export function BillingTab({
 
           <button
             onClick={() => setIsAddMilestoneModalOpen(true)}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold transition shadow-sm"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition shadow-md shadow-blue-600/25"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Add Milestone</span>
@@ -523,7 +523,7 @@ export function BillingTab({
 
           <button
             onClick={() => setIsCreateInvoiceModalOpen(true)}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold transition shadow-sm"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition shadow-md shadow-blue-600/25"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Raise Invoice</span>
@@ -675,7 +675,7 @@ export function BillingTab({
 
           <button
             onClick={() => setIsRecordReceiptModalOpen(true)}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold transition shadow-sm"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition shadow-md shadow-blue-600/25"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Record Receipt</span>
@@ -751,7 +751,7 @@ export function BillingTab({
 
       {/* MODAL: EDIT CONTRACT VALUE */}
       {isContractValueModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
           <div className="w-full max-w-sm bg-slate-900 border border-slate-800 rounded-2xl shadow-xl overflow-hidden p-6 space-y-4 text-xs animate-in fade-in zoom-in-95 duration-150">
             <h3 className="text-sm font-bold text-slate-100">Edit Base Contract Value</h3>
             <form onSubmit={handleUpdateContractValue} className="space-y-4">
@@ -792,7 +792,7 @@ export function BillingTab({
 
       {/* MODAL: ADD VARIATION */}
       {isAddVariationModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
           <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl shadow-xl overflow-hidden p-6 space-y-4 text-xs animate-in fade-in zoom-in-95 duration-150">
             <h3 className="text-sm font-bold text-slate-100">Add Variation Order</h3>
             <form onSubmit={handleCreateVariation} className="space-y-3">
@@ -868,7 +868,7 @@ export function BillingTab({
 
       {/* MODAL: ADD MILESTONE */}
       {isAddMilestoneModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
           <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl shadow-xl overflow-hidden p-6 space-y-4 text-xs animate-in fade-in zoom-in-95 duration-150">
             <h3 className="text-sm font-bold text-slate-100">Add Payment Milestone</h3>
             <form onSubmit={handleCreateMilestone} className="space-y-3">
@@ -942,7 +942,7 @@ export function BillingTab({
 
       {/* MODAL: RAISE INVOICE */}
       {isCreateInvoiceModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
           <div className="w-full max-w-lg bg-slate-900 border border-slate-800 rounded-2xl shadow-xl overflow-hidden p-6 space-y-4 text-xs animate-in fade-in zoom-in-95 duration-150">
             <h3 className="text-sm font-bold text-slate-100">Raise Customer Invoice</h3>
             <form onSubmit={handleCreateInvoice} className="space-y-3">
@@ -1062,7 +1062,7 @@ export function BillingTab({
 
       {/* MODAL: RECORD RECEIPT */}
       {isRecordReceiptModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
           <div className="w-full max-w-lg bg-slate-900 border border-slate-800 rounded-2xl shadow-xl overflow-hidden p-6 space-y-4 text-xs animate-in fade-in zoom-in-95 duration-150">
             <h3 className="text-sm font-bold text-slate-100">Record Customer Receipt</h3>
             <form onSubmit={handleRecordReceipt} className="space-y-3">
@@ -1186,7 +1186,7 @@ export function BillingTab({
 
       {/* MODAL: ATTACH INVOICE DOCUMENT */}
       {isAttachDocModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
           <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl shadow-xl overflow-hidden p-6 space-y-4 text-xs animate-in fade-in zoom-in-95 duration-150">
             <h3 className="text-sm font-bold text-slate-100">Attach Document to Invoice</h3>
             <form onSubmit={handleAttachInvoiceDoc} className="space-y-3">
