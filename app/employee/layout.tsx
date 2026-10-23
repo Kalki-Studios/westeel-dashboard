@@ -6,6 +6,8 @@ import { createEmployeePortalClient as createClient } from "@/lib/supabase/serve
 import { employeeLogoutAction as logoutAction } from "@/lib/auth/employee-actions";
 import { EmployeeLoginGate } from "./employee-login-gate";
 import { AppShell } from "@/components/app-shell";
+import { UnderConstruction } from "@/components/under-construction";
+import { getSiteFlags } from "@/lib/settings/flags";
 import {
   CheckSquare,
   AlertCircle,
@@ -88,6 +90,7 @@ async function EmployeeLayoutContent({
   children: React.ReactNode;
 }) {
   await connection();
+  if ((await getSiteFlags()).underConstruction) return <UnderConstruction />;
   const supabase = await createClient();
 
   const {

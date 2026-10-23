@@ -45,3 +45,11 @@ supabase/.temp/
 
 # database dumps contain real data
 backups/
+
+# private project files: plans, notes, AI instructions, SQL, tooling. Never publish.
+*.md
+!README.md
+.claude/
+scripts/
+supabase/
+*.sql

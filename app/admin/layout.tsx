@@ -66,6 +66,7 @@ import { connection } from "next/server";
 import { createAdminPortalClient as createClient } from "@/lib/supabase/server-admin";
 import { DirectorGate } from "./director-gate";
 import { checkDirectorMfaStatus } from "@/lib/auth/actions";
+import { getSiteFlags } from "@/lib/settings/flags";
 import { Loader2 } from "lucide-react";
 import { AdminBreadcrumbs } from "./admin-breadcrumbs";
 import { AppShell } from "@/components/app-shell";
@@ -78,6 +79,7 @@ async function AdminLayoutContent({ children }: { children: React.ReactNode }) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  const mfaOff = !!(await getSiteFlags()).mfaOffUntil;
   let isDirector = false;
   let isAal2Verified = false;
   let mfaEnrolled = false;
@@ -91,9 +93,11 @@ async function AdminLayoutContent({ children }: { children: React.ReactNode }) {
 
     if (isDirector) {
       const { data: aal } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
-      mfaEnrolled = aal?.nextLevel === "aal2";
+      const required = aal?.nextLevel === "aal2";
       // Not enrolled: let them through to the setup screen below; dashboard stays locked.
-      isAal2Verified = !mfaEnrolled || aal?.currentLevel === "aal2";
+      // Developer switch "2FA off": neither the code check nor the setup lock applies.
+      mfaEnrolled = required || mfaOff;
+      isAal2Verified = !required || aal?.currentLevel === "aal2" || mfaOff;
     }
   }
 
@@ -200,7 +204,12 @@ async function AdminLayoutContent({ children }: { children: React.ReactNode }) {
         </form>
       }
     >
-      <MfaEnrollmentBanner />
+      {mfaOff && (
+        <div className="p-3 rounded-xl border border-rose-200 bg-rose-50 text-rose-700 text-xs">
+          Developer mode: Google Authenticator is switched off. Turn it back on in Settings → Developer.
+        </div>
+      )}
+      {!mfaOff && <MfaEnrollmentBanner />}
       {children}
     </AppShell>
   );

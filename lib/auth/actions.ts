@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { createAdminPortalClient as createClient } from "@/lib/supabase/server-admin";
 import { createClient as createPlainClient } from "@supabase/supabase-js";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { getSiteFlags, setSiteFlag } from "@/lib/settings/flags";
 import {
   LoginSchema,
   ResetPasswordRequestSchema,
@@ -68,7 +69,7 @@ export async function loginAction(prevState: unknown, formData: FormData) {
     const { data: factors } = await supabase.auth.mfa.listFactors();
     const verifiedTotp = factors?.totp?.find((f) => f.status === "verified");
 
-    if (verifiedTotp) {
+    if (verifiedTotp && !(await getSiteFlags()).mfaOffUntil) {
       const { data: challenge, error: challengeErr } = await supabase.auth.mfa.challenge({
         factorId: verifiedTotp.id,
       });
@@ -96,6 +97,7 @@ export async function loginAction(prevState: unknown, formData: FormData) {
  */
 export async function checkDirectorMfaStatus(): Promise<boolean> {
   try {
+    if ((await getSiteFlags()).mfaOffUntil) return false; // developer switch: password login only
     const admin = createAdminClient();
     const { data: roleData } = await admin
       .from("user_roles")
@@ -229,7 +231,7 @@ async function getVerifiedDirector() {
   if (!(roles || []).some((r) => r.role === "director")) return { error: "Directors only." } as const;
 
   const { data: aal } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
-  if (aal?.nextLevel === "aal2" && aal.currentLevel !== "aal2") {
+  if (aal?.nextLevel === "aal2" && aal.currentLevel !== "aal2" && !(await getSiteFlags()).mfaOffUntil) {
     return { error: "Verify your authenticator code first." } as const;
   }
   return { user, supabase } as const;
@@ -242,6 +244,18 @@ export async function resetDirectorMfaAction() {
 
   await removeDirectorFactors(user.id);
   return { success: true, message: "Google Authenticator removed. Phone unpaired successfully." };
+}
+
+/** Developer switches in Settings. Director only. */
+export async function setSiteFlagAction(flag: "under_construction" | "mfa_off", on: boolean) {
+  const auth = await getVerifiedDirector();
+  if ("error" in auth) return { error: auth.error };
+
+  const error = await setSiteFlag(flag, on);
+  if (error) return { error: `Could not save (has migration 013 been run?): ${error}` };
+
+  revalidatePath("/", "layout");
+  return { success: true };
 }
 
 /** Director changes their own name, login email and/or password. Needs the current password. */

@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { getCostCategories } from "@/lib/costs/queries";
 import { getLeadSources, getLostReasons } from "@/lib/sales/queries";
 import { SettingsClient } from "./settings-client";
+import { getSiteFlags } from "@/lib/settings/flags";
 import { createAdminPortalClient } from "@/lib/supabase/server-admin";
 import { Loader2 } from "lucide-react";
 
@@ -15,6 +16,7 @@ async function SettingsContent() {
   } = await supabase.auth.getUser();
   const { data: profile } = await supabase.from("profiles").select("full_name").eq("id", user?.id ?? "").maybeSingle();
 
+  const flags = await getSiteFlags();
   const [categories, leadSources, lostReasons] = await Promise.all([
     getCostCategories(),
     getLeadSources(true),
@@ -27,6 +29,7 @@ async function SettingsContent() {
       leadSources={leadSources}
       lostReasons={lostReasons}
       isDirector={true}
+      flags={flags}
       account={{ fullName: profile?.full_name ?? "", email: user?.email ?? "" }}
     />
   );

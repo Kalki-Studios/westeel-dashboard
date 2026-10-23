@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { CostCategory } from "@/lib/costs/types";
-import { AccountForm } from "./account-form";
+import { AccountForm, AuthenticatorReset } from "./account-form";
+import { DeveloperMode } from "./developer-mode";
 import { LeadSourceItem, LostReasonItem } from "@/lib/sales/types";
 import {
   createCostCategoryAction,
@@ -18,6 +19,7 @@ import {
 import {
   Settings,
   UserRound,
+  Wrench,
   Layers,
   Plus,
   Edit2,
@@ -38,6 +40,7 @@ interface SettingsClientProps {
   lostReasons: LostReasonItem[];
   isDirector: boolean;
   account: { fullName: string; email: string };
+  flags: { underConstruction: boolean; mfaOffUntil: string | null };
 }
 
 export function SettingsClient({
@@ -46,11 +49,12 @@ export function SettingsClient({
   lostReasons,
   isDirector,
   account,
+  flags,
 }: SettingsClientProps) {
   const router = useRouter();
 
   // Active Tab
-  const [activeTab, setActiveTab] = useState<"account" | "costs" | "lead_sources" | "lost_reasons">("account");
+  const [activeTab, setActiveTab] = useState<"account" | "costs" | "lead_sources" | "lost_reasons" | "developer">("account");
 
   // Create Modal State (Cost Categories)
   const [isCreateCategoryModalOpen, setIsCreateCategoryModalOpen] = useState(false);
@@ -350,9 +354,30 @@ export function SettingsClient({
           <AlertCircle className="w-3.5 h-3.5" />
           <span>Lost Reasons</span>
         </button>
+
+        <button
+          onClick={() => setActiveTab("developer")}
+          className={`px-4 py-2 text-xs font-semibold rounded-xl flex items-center gap-2 transition ${
+            activeTab === "developer"
+              ? "bg-blue-600 text-white shadow-sm"
+              : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+          }`}
+        >
+          <Wrench className="w-3.5 h-3.5" />
+          <span>Developer</span>
+        </button>
       </div>
 
-      {activeTab === "account" && <AccountForm fullName={account.fullName} email={account.email} />}
+      {activeTab === "developer" && (
+        <DeveloperMode underConstruction={flags.underConstruction} mfaOffUntil={flags.mfaOffUntil} />
+      )}
+
+      {activeTab === "account" && (
+        <div className="space-y-4">
+          <AccountForm fullName={account.fullName} email={account.email} />
+          <AuthenticatorReset />
+        </div>
+      )}
 
       {/* TAB 1: COST CATEGORIES */}
       {activeTab === "costs" && (

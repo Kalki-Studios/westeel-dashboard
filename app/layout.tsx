@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Westeel Buildings | Executive & Operations Spatial Portal",
-  description: "Executive control dashboard and operations portal for Westeel Buildings",
+  title: "Westeel Buildings",
+  description: "Westeel Buildings employee portal",
   icons: {
     icon: "/westeel-logo-cropped.png",
     apple: "/westeel-logo-cropped.png",
