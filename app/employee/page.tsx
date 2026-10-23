@@ -1,37 +1,73 @@
-import { Briefcase, Clock } from "lucide-react";
+import { Suspense } from "react";
+import { getTasksList } from "@/lib/tasks/queries";
+import { getProjectsList } from "@/lib/projects/queries";
+import { getSiteReportsList } from "@/lib/site-reports/queries";
+import { getDocumentsList } from "@/lib/documents/queries";
+import { getEnquiries } from "@/lib/sales/queries";
+import { EmployeeMyWorkClient } from "./my-work-client";
+import { Loader2 } from "lucide-react";
+
+import { createEmployeePortalClient } from "@/lib/supabase/server-employee";
+import { connection } from "next/server";
+
+async function EmployeeWorkContent() {
+  await connection();
+  const supabase = await createEmployeePortalClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  let userRole: "site_engineer" | "sales" | "accounts" | "purchase_pm" | undefined;
+  let salesMode: "lead" | "field" | "both" = "both";
+
+  if (user) {
+    const { data: roles } = await supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", user.id);
+
+    const rList = (roles || []).map((r) => r.role);
+    if (rList.includes("sales_lead")) salesMode = "lead";
+    else if (rList.includes("sales_field")) salesMode = "field";
+    if (rList.includes("sales")) userRole = "sales";
+    else if (rList.includes("accounts")) userRole = "accounts";
+    else if (rList.includes("project_manager") || rList.includes("purchase")) userRole = "purchase_pm";
+    else if (rList.includes("site_engineer")) userRole = "site_engineer";
+  }
+
+  const [tasks, projects, reports, pendingDrawings, enquiries] = await Promise.all([
+    user ? getTasksList({ assigneeId: user.id }) : Promise.resolve([]),
+    getProjectsList(),
+    getSiteReportsList(),
+    getDocumentsList({ category: "drawing", reviewStatus: "pending" }),
+    userRole === "sales" ? getEnquiries() : Promise.resolve([]),
+  ]);
+
+  return (
+    <EmployeeMyWorkClient
+      tasks={tasks}
+      projects={projects}
+      reports={reports}
+      pendingDrawings={pendingDrawings}
+      userRole={userRole}
+      salesMode={salesMode}
+      enquiries={enquiries}
+    />
+  );
+}
 
 export default function EmployeeWorkPage() {
   return (
-    <div className="space-y-6 max-w-4xl">
-      <div>
-        <h1 className="text-xl font-semibold tracking-tight text-slate-100">
-          My Work
-        </h1>
-        <p className="text-xs text-slate-400 mt-1">
-          Assigned tasks, active project commitments, and role-specific action items.
-        </p>
-      </div>
-
-      {/* Honest Empty State */}
-      <div className="p-4 rounded-lg border border-slate-800 bg-slate-900/50 flex items-start gap-3">
-        <Clock className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
-        <div className="space-y-1">
-          <div className="text-sm font-medium text-slate-200">
-            Employee Shell Initialized (T1)
-          </div>
-          <p className="text-xs text-slate-400 leading-relaxed">
-            The employee navigation and layout structure is configured. Active user assignments, tasks, and site reporting will activate during Tasks T3–T8.
-          </p>
+    <Suspense
+      fallback={
+        <div className="p-16 text-center text-slate-400 flex flex-col items-center justify-center gap-3 text-xs">
+          <Loader2 className="w-5 h-5 animate-spin text-amber-400" />
+          <span>Loading workspace...</span>
         </div>
-      </div>
-
-      <div className="rounded-lg border border-slate-800 bg-slate-900/40 p-8 text-center space-y-2">
-        <Briefcase className="w-8 h-8 text-slate-400 mx-auto" />
-        <div className="text-sm font-medium text-slate-300">No active assignments yet</div>
-        <div className="text-xs text-slate-400 max-w-sm mx-auto">
-          You are not currently assigned to any projects or pending tasks. Once tasks or site projects are assigned, they will appear here.
-        </div>
-      </div>
-    </div>
+      }
+    >
+      <EmployeeWorkContent />
+    </Suspense>
   );
 }
+

@@ -1,10 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ShieldAlert, ShieldCheck, QrCode, Loader2, X, Check } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { ShieldAlert, ShieldCheck, QrCode, Loader2, X, Check, RotateCcw } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { resetDirectorMfaAction } from "@/lib/auth/actions";
 
 export function MfaEnrollmentBanner() {
+  const router = useRouter();
   const [hasMfa, setHasMfa] = useState<boolean | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -33,9 +36,17 @@ export function MfaEnrollmentBanner() {
   const startEnrollment = async () => {
     setLoading(true);
     setError(null);
+    setSuccess(false);
+    setVerifyCode("");
     const supabase = createClient();
 
     try {
+      // A half-finished earlier attempt blocks a new enroll (name conflict), so clear it first.
+      const { data: existing } = await supabase.auth.mfa.listFactors();
+      for (const f of existing?.all ?? []) {
+        if (f.status === "unverified") await supabase.auth.mfa.unenroll({ factorId: f.id });
+      }
+
       const { data, error: enrollError } = await supabase.auth.mfa.enroll({
         factorType: "totp",
         issuer: "Westeel Buildings",
@@ -87,6 +98,7 @@ export function MfaEnrollmentBanner() {
 
       setSuccess(true);
       setHasMfa(true);
+      router.refresh();
       setTimeout(() => {
         setIsOpen(false);
       }, 1500);
@@ -97,40 +109,77 @@ export function MfaEnrollmentBanner() {
     }
   };
 
-  if (hasMfa === null || hasMfa === true) {
-    return null; // Already enrolled or checking
+  const handleResetMfa = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await resetDirectorMfaAction();
+      if (res && "error" in res && res.error) {
+        alert(res.error);
+        setLoading(false);
+        return;
+      }
+      setHasMfa(false);
+      setLoading(false);
+      router.refresh();
+      // Immediately launch the enrollment modal to setup Google Authenticator again
+      await startEnrollment();
+    } catch (err) {
+      alert("Error resetting MFA: " + (err instanceof Error ? err.message : String(err)));
+      setLoading(false);
+    }
+  };
+
+  if (hasMfa === null) {
+    return null;
   }
 
   return (
     <>
-      <div className="p-3.5 rounded-lg border border-amber-500/30 bg-amber-500/10 flex items-center justify-between gap-3 text-xs">
-        <div className="flex items-center gap-2.5 text-amber-300">
-          <ShieldAlert className="w-4 h-4 shrink-0 text-amber-400" />
-          <span>
-            <strong>Director Security Requirement:</strong> Two-Factor Authentication (TOTP) is required for director accounts.
-          </span>
+      {hasMfa === true ? null : (
+        <div className="glass-card-orange p-4 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs shadow-sm relative overflow-hidden">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-xl bg-orange-100 border border-orange-200 flex items-center justify-center text-orange-600 shrink-0">
+              <ShieldAlert className="w-4 h-4 shrink-0" />
+            </div>
+            <div>
+              <span className="font-bold text-slate-900 text-xs block sm:inline">
+                Director Security Requirement:
+              </span>{" "}
+              <span className="text-slate-600">
+                Two-Factor Authentication (TOTP) is required for director accounts.
+              </span>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={startEnrollment}
+            disabled={loading}
+            className="btn-spatial-orange px-4 py-2 text-xs transition shrink-0 cursor-pointer flex items-center gap-2"
+          >
+            {loading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <QrCode className="w-3.5 h-3.5" />}
+            <span>Setup TOTP MFA</span>
+          </button>
         </div>
-        <button
-          onClick={startEnrollment}
-          disabled={loading}
-          className="px-3 py-1.5 rounded-md bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold text-[11px] transition shrink-0 cursor-pointer flex items-center gap-1.5"
-        >
-          {loading ? <Loader2 className="w-3 h-3 animate-spin" /> : <QrCode className="w-3 h-3" />}
-          <span>Setup TOTP MFA</span>
-        </button>
-      </div>
+      )}
+
+      {!isOpen && error && (
+        <div className="text-xs text-rose-700 bg-rose-50 border border-rose-200 rounded-xl px-3 py-2">
+          {error}
+        </div>
+      )}
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="w-full max-w-md rounded-xl border border-slate-800 bg-slate-900 p-6 space-y-4 shadow-2xl">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-              <h3 className="text-sm font-semibold text-slate-100 flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-amber-400" />
+        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 space-y-4 shadow-xl">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+              <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-orange-600" />
                 <span>Configure Two-Factor Authenticator</span>
               </h3>
               <button
                 onClick={() => setIsOpen(false)}
-                className="text-slate-500 hover:text-slate-300 cursor-pointer"
+                className="text-slate-400 hover:text-slate-700 transition cursor-pointer p-1 rounded-lg hover:bg-slate-100"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -138,24 +187,24 @@ export function MfaEnrollmentBanner() {
 
             {success ? (
               <div className="py-8 text-center space-y-2">
-                <div className="w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto">
+                <div className="w-10 h-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
                   <Check className="w-6 h-6 stroke-[3]" />
                 </div>
-                <div className="text-sm font-semibold text-slate-100">
+                <div className="text-sm font-semibold text-slate-900">
                   MFA Successfully Configured
                 </div>
-                <div className="text-xs text-slate-400">
+                <div className="text-xs text-slate-500">
                   Your director account is now protected with TOTP two-factor authentication.
                 </div>
               </div>
             ) : (
               <form onSubmit={handleVerify} className="space-y-4">
-                <p className="text-xs text-slate-300">
+                <p className="text-xs text-slate-600">
                   Scan the QR code with Google Authenticator or any TOTP app, then enter the 6-digit verification code.
                 </p>
 
                 {qrCode && (
-                  <div className="p-3 bg-white rounded-lg w-fit mx-auto shadow-sm">
+                  <div className="p-3 bg-white rounded-lg w-fit mx-auto shadow-sm border border-slate-200">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={qrCode} alt="TOTP QR Code" className="w-40 h-40" />
                   </div>
@@ -166,20 +215,20 @@ export function MfaEnrollmentBanner() {
                     <span className="text-[10px] text-slate-500 block uppercase font-mono">
                       Manual Secret Key
                     </span>
-                    <code className="text-xs text-amber-300 font-mono select-all bg-slate-950 px-2 py-1 rounded border border-slate-800">
+                    <code className="text-xs text-orange-700 font-mono select-all bg-slate-100 px-2 py-1 rounded border border-slate-200">
                       {secret}
                     </code>
                   </div>
                 )}
 
                 {error && (
-                  <div className="text-xs text-rose-400 bg-rose-950/40 border border-rose-900/60 rounded px-3 py-2">
+                  <div className="text-xs text-rose-700 bg-rose-50 border border-rose-200 rounded px-3 py-2">
                     {error}
                   </div>
                 )}
 
                 <div className="space-y-1.5">
-                  <label className="text-[11px] font-semibold text-slate-300 block">
+                  <label className="text-[11px] font-semibold text-slate-700 block">
                     6-Digit Verification Code
                   </label>
                   <input
@@ -190,7 +239,7 @@ export function MfaEnrollmentBanner() {
                     value={verifyCode}
                     onChange={(e) => setVerifyCode(e.target.value)}
                     placeholder="123456"
-                    className="w-full text-center tracking-widest text-base font-mono py-2 rounded-lg bg-slate-950 border border-slate-700 text-slate-100 focus:outline-none focus:border-amber-500"
+                    className="w-full text-center tracking-widest text-base font-mono py-2 rounded-lg bg-white border border-slate-300 text-slate-900 focus:outline-none focus:border-blue-600"
                   />
                 </div>
 
@@ -198,14 +247,14 @@ export function MfaEnrollmentBanner() {
                   <button
                     type="button"
                     onClick={() => setIsOpen(false)}
-                    className="px-3 py-2 rounded-lg bg-slate-800 text-slate-300 text-xs hover:bg-slate-700 transition cursor-pointer"
+                    className="px-3 py-2 rounded-lg bg-slate-100 text-slate-700 text-xs hover:bg-slate-200 transition cursor-pointer"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={loading || verifyCode.length !== 6}
-                    className="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 disabled:opacity-50 text-slate-950 font-semibold text-xs transition cursor-pointer"
+                    className="btn-spatial-orange px-4 py-2 disabled:opacity-50 text-xs transition cursor-pointer"
                   >
                     {loading ? "Verifying..." : "Verify & Enable"}
                   </button>

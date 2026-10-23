@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { logoutAction } from "@/lib/auth/actions";
 import { MfaEnrollmentBanner } from "./mfa-enrollment-banner";
 import {
@@ -16,12 +17,13 @@ import {
   Users,
   Settings,
   ShieldCheck,
-  Building,
+  ChevronRight,
 } from "lucide-react";
 
 const NAV_ITEMS = [
   {
-    category: "Priority 1: Status & Delays",
+    category: "Status & Operations",
+    accent: "text-blue-600",
     items: [
       { label: "Overview", href: "/x9admin", icon: LayoutDashboard },
       { label: "Projects", href: "/x9admin/projects", icon: Building2 },
@@ -33,7 +35,8 @@ const NAV_ITEMS = [
     ],
   },
   {
-    category: "Priority 2: Finance & Cash",
+    category: "Finance & Cash",
+    accent: "text-orange-600",
     items: [
       { label: "Collections", href: "/x9admin/collections", icon: ArrowDownRight },
       { label: "Payables", href: "/x9admin/payables", icon: ArrowUpRight },
@@ -41,13 +44,15 @@ const NAV_ITEMS = [
     ],
   },
   {
-    category: "Priority 3: Sales Tracker",
+    category: "Sales Tracker",
+    accent: "text-blue-600",
     items: [
       { label: "Sales Tracker", href: "/x9admin/sales", icon: TrendingUp },
     ],
   },
   {
     category: "System & Governance",
+    accent: "text-slate-500",
     items: [
       { label: "Employees", href: "/x9admin/employees", icon: Users },
       { label: "Settings", href: "/x9admin/settings", icon: Settings },
@@ -56,106 +61,162 @@ const NAV_ITEMS = [
   },
 ];
 
-export default function AdminLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="flex min-h-screen bg-slate-950 text-slate-100">
-      {/* Sidebar */}
-      <aside className="w-64 border-r border-slate-800 bg-slate-900/70 backdrop-blur-sm flex flex-col shrink-0">
-        {/* Brand Header */}
-        <div className="h-16 border-b border-slate-800 flex items-center justify-between px-4">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
-              <Building className="w-4 h-4" />
-            </div>
-            <div>
-              <div className="font-semibold tracking-tight text-sm text-slate-100 leading-none">
-                WESTEEL
-              </div>
-              <div className="text-[10px] text-slate-400 font-mono tracking-wider mt-0.5">
-                DIRECTOR PORTAL
-              </div>
-            </div>
+import { Suspense } from "react";
+import { connection } from "next/server";
+import { createAdminPortalClient as createClient } from "@/lib/supabase/server-admin";
+import { DirectorGate } from "./director-gate";
+import { checkDirectorMfaStatus } from "@/lib/auth/actions";
+import { Loader2 } from "lucide-react";
+import { AdminBreadcrumbs } from "./admin-breadcrumbs";
+import { AppShell } from "@/components/app-shell";
+
+
+async function AdminLayoutContent({ children }: { children: React.ReactNode }) {
+  await connection();
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  let isDirector = false;
+  let isAal2Verified = false;
+  let mfaEnrolled = false;
+
+  if (user) {
+    const { data: roles } = await supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", user.id);
+    isDirector = (roles || []).some((r) => r.role === "director");
+
+    if (isDirector) {
+      const { data: aal } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+      mfaEnrolled = aal?.nextLevel === "aal2";
+      // Not enrolled: let them through to the setup screen below; dashboard stays locked.
+      isAal2Verified = !mfaEnrolled || aal?.currentLevel === "aal2";
+    }
+  }
+
+  if (!user || !isDirector || !isAal2Verified) {
+    const hasActiveMfa = await checkDirectorMfaStatus();
+    return <DirectorGate hasActiveMfa={hasActiveMfa} />;
+  }
+
+  if (!mfaEnrolled) {
+    return (
+      <div className="min-h-dvh glass-canvas flex flex-col items-center justify-center gap-4 p-4">
+        <div className="w-full max-w-xl space-y-4">
+          <div className="text-center space-y-1">
+            <h1 className="text-xl font-bold text-slate-900">Set up two-factor login</h1>
+            <p className="text-sm text-slate-700">
+              The dashboard stays locked until Google Authenticator is paired.
+            </p>
           </div>
-          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
-            V1
-          </span>
+          <MfaEnrollmentBanner />
+          <form action={logoutAction} className="text-center">
+            <button type="submit" className="text-xs text-slate-600 hover:text-slate-900 underline cursor-pointer">
+              Sign Out
+            </button>
+          </form>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <AppShell
+      sidebar={
+      <aside className="w-full glass-sidebar rounded-2xl flex flex-col overflow-hidden h-full">
+        {/* Brand Header */}
+        <div className="h-18 border-b border-slate-100 px-5 py-4 flex items-center justify-between">
+          <Link href="/x9admin" className="flex items-center gap-3 group">
+            <Image
+              src="/westeel-logo-cropped.png"
+              alt="Westeel Logo"
+              width={110}
+              height={40}
+              className="h-8 w-auto object-contain group-hover:opacity-80 transition-opacity"
+              priority
+            />
+          </Link>
         </div>
 
-        {/* Navigation Modules */}
-        <div className="flex-1 overflow-y-auto px-3 py-4 space-y-6 text-sm">
+        {/* Navigation */}
+        <div className="flex-1 overflow-y-auto px-3 py-4 space-y-5 text-sm">
           {NAV_ITEMS.map((group) => (
             <div key={group.category} className="space-y-1">
-              <div className="px-2 text-[10px] font-semibold uppercase tracking-wider text-slate-400">
-                {group.category}
+              <div className="px-2 mb-1.5">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-900 block">
+                  {group.category}
+                </span>
               </div>
-              <div className="space-y-0.5 pt-1">
-                {group.items.map((item) => {
-                  const Icon = item.icon;
-                  return (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className="flex items-center gap-2.5 px-2.5 py-2 rounded text-slate-300 hover:text-white hover:bg-slate-800/80 transition-colors text-xs font-medium"
-                    >
-                      <Icon className="w-4 h-4 text-slate-400 shrink-0" />
+              {group.items.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="group flex items-center justify-between px-3 py-3 md:py-2.5 rounded-xl text-slate-800 hover:text-black hover:bg-slate-100 border border-transparent hover:border-slate-200 transition-all text-xs font-semibold"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <Icon className="w-4 h-4 text-slate-600 group-hover:text-blue-600 transition-colors shrink-0" />
                       <span>{item.label}</span>
-                    </Link>
-                  );
-                })}
-              </div>
+                    </div>
+                    <ChevronRight className="w-3.5 h-3.5 text-slate-400 opacity-0 group-hover:opacity-100 group-hover:text-orange-500 group-hover:translate-x-0.5 transition-all" />
+                  </Link>
+                );
+              })}
             </div>
           ))}
         </div>
 
-        {/* Footer Role Switch */}
-        <div className="p-3 border-t border-slate-800 bg-slate-950/40 text-xs">
+        {/* Footer */}
+        <div className="p-3.5 border-t border-slate-100 text-xs">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-emerald-500" />
-              <span className="text-slate-300 font-medium">Director</span>
+              <span className="w-2 h-2 rounded-full bg-emerald-500" />
+              <span className="text-slate-700 font-semibold text-[11px]">Director</span>
             </div>
             <Link
               href="/employee"
-              className="text-[11px] text-amber-400 hover:text-amber-300 underline font-mono"
+              className="text-[11px] text-orange-600 hover:text-orange-700 flex items-center gap-1 font-semibold"
             >
-              Employee View →
+              <span>Field Ops</span>
+              <span>→</span>
             </Link>
           </div>
         </div>
       </aside>
+      }
+      header={<AdminBreadcrumbs />}
+      actions={
+        <form action={logoutAction}>
+          <button
+            type="submit"
+            className="text-xs px-3 md:px-4 py-2 md:py-1.5 rounded-lg btn-spatial-glass transition cursor-pointer font-bold text-black"
+          >
+            Sign Out
+          </button>
+        </form>
+      }
+    >
+      <MfaEnrollmentBanner />
+      {children}
+    </AppShell>
+  );
+}
 
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0">
-        <header className="h-16 border-b border-slate-800 bg-slate-900/40 px-6 flex items-center justify-between">
-          <div className="flex items-center gap-2 text-xs text-slate-400">
-            <span>Director</span>
-            <span>/</span>
-            <span className="text-slate-200 font-medium">Dashboard</span>
-          </div>
-          <div className="flex items-center gap-3">
-            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] bg-slate-800/80 border border-slate-700 text-slate-300 font-mono">
-              IST (UTC+5:30)
-            </span>
-            <form action={logoutAction}>
-              <button
-                type="submit"
-                className="text-xs px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 transition cursor-pointer"
-              >
-                Sign Out
-              </button>
-            </form>
-          </div>
-        </header>
-
-        <main className="flex-1 p-6 overflow-y-auto space-y-6">
-          <MfaEnrollmentBanner />
-          {children}
-        </main>
-      </div>
-    </div>
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-dvh glass-canvas flex items-center justify-center text-slate-400 gap-3 text-xs">
+          <Loader2 className="w-5 h-5 animate-spin text-blue-600" />
+          <span>Loading Dashboard...</span>
+        </div>
+      }
+    >
+      <AdminLayoutContent>{children}</AdminLayoutContent>
+    </Suspense>
   );
 }

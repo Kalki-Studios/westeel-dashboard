@@ -7,8 +7,7 @@ import {
   Check,
   X,
   Edit2,
-  UserX,
-  UserCheck,
+  Trash2,
   AlertCircle,
   Loader2,
 } from "lucide-react";
@@ -17,11 +16,13 @@ import {
   ROLE_LABELS,
   AppRole,
   EmployeeProfile,
+  ROLE_CHOICES,
+  roleChoiceOf,
 } from "@/lib/auth/types";
 import {
   createEmployeeAction,
   updateEmployeeAction,
-  toggleEmployeeStatusAction,
+  deleteEmployeeAction,
 } from "@/lib/auth/actions";
 
 interface EmployeeTableProps {
@@ -32,6 +33,9 @@ export function EmployeeTable({ initialEmployees }: EmployeeTableProps) {
   const [employees, setEmployees] = useState<EmployeeProfile[]>(initialEmployees);
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [editingEmployee, setEditingEmployee] = useState<EmployeeProfile | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<EmployeeProfile | null>(null);
+  const [deleteConfirmText, setDeleteConfirmText] = useState("");
+  const [deleteError, setDeleteError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -42,6 +46,10 @@ export function EmployeeTable({ initialEmployees }: EmployeeTableProps) {
   const [phone, setPhone] = useState("");
   const [designation, setDesignation] = useState("Staff");
   const [selectedRoles, setSelectedRoles] = useState<AppRole[]>(["site_engineer"]);
+
+  // Form State for Edit Employee
+  const [editEmail, setEditEmail] = useState("");
+  const [editPassword, setEditPassword] = useState("");
 
   const resetAddForm = () => {
     setFullName("");
@@ -88,24 +96,23 @@ export function EmployeeTable({ initialEmployees }: EmployeeTableProps) {
     }
   };
 
-  const handleToggleStatus = async (emp: EmployeeProfile) => {
-    const nextStatus = !emp.isActive;
-    const confirmMsg = nextStatus
-      ? `Reactivate account for ${emp.fullName}?`
-      : `Deactivate account for ${emp.fullName}? They will be blocked from accessing the system immediately.`;
-
-    if (!window.confirm(confirmMsg)) return;
+  const handleConfirmDelete = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!deleteTarget || deleteConfirmText.trim() !== deleteTarget.fullName.trim()) return;
 
     setIsSubmitting(true);
+    setDeleteError(null);
     try {
-      const res = await toggleEmployeeStatusAction(emp.id, nextStatus);
+      const res = await deleteEmployeeAction(deleteTarget.id);
       if (res.error) {
-        alert(`Error: ${res.error}`);
+        setDeleteError(res.error);
       } else {
-        setEmployees((prev) =>
-          prev.map((e) => (e.id === emp.id ? { ...e, isActive: nextStatus } : e))
-        );
+        setEmployees((prev) => prev.filter((e) => e.id !== deleteTarget.id));
+        setDeleteTarget(null);
+        setDeleteConfirmText("");
       }
+    } catch (err: unknown) {
+      setDeleteError(err instanceof Error ? err.message : "Deletion failed");
     } finally {
       setIsSubmitting(false);
     }
@@ -122,6 +129,8 @@ export function EmployeeTable({ initialEmployees }: EmployeeTableProps) {
       const res = await updateEmployeeAction({
         id: editingEmployee.id,
         fullName: editingEmployee.fullName,
+        email: editEmail || undefined,
+        password: editPassword.trim() ? editPassword.trim() : undefined,
         phone: editingEmployee.phone || undefined,
         designation: editingEmployee.designation || undefined,
         roles: editingEmployee.roles,
@@ -150,9 +159,6 @@ export function EmployeeTable({ initialEmployees }: EmployeeTableProps) {
             <Users className="w-5 h-5 text-amber-400" />
             <span>Employee Directory</span>
           </h1>
-          <p className="text-xs text-slate-400 mt-0.5">
-            Manage staff accounts, assign operational roles, and enforce security controls.
-          </p>
         </div>
 
         <button
@@ -203,7 +209,22 @@ export function EmployeeTable({ initialEmployees }: EmployeeTableProps) {
                       </div>
                     </td>
                     <td className="px-4 py-3">
-                      <div>{emp.email || "—"}</div>
+                      <div>
+                        {emp.email ? (
+                          <span>
+                            {emp.email.endsWith("@westeel.test") ? (
+                              <>
+                                <span className="font-semibold text-slate-100">{emp.email.replace("@westeel.test", "")}</span>
+                                <span className="text-slate-500 text-[10px] block">{emp.email}</span>
+                              </>
+                            ) : (
+                              <span>{emp.email}</span>
+                            )}
+                          </span>
+                        ) : (
+                          "—"
+                        )}
+                      </div>
                       <div className="text-slate-500 text-[11px]">
                         {emp.phone || "No phone"}
                       </div>
@@ -215,7 +236,7 @@ export function EmployeeTable({ initialEmployees }: EmployeeTableProps) {
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex flex-wrap gap-1">
-                        {emp.roles.map((r) => (
+                        {emp.roles.filter((r) => !(r === "sales" && emp.roles.some((x) => x === "sales_lead" || x === "sales_field"))).map((r) => (
                           <span
                             key={r}
                             className={`px-1.5 py-0.5 rounded text-[10px] font-mono border ${
@@ -252,26 +273,28 @@ export function EmployeeTable({ initialEmployees }: EmployeeTableProps) {
                     <td className="px-4 py-3 text-right">
                       <div className="flex items-center justify-end gap-2">
                         <button
-                          onClick={() => setEditingEmployee({ ...emp })}
+                          onClick={() => {
+                            setEditingEmployee({ ...emp });
+                            setEditEmail(emp.email || "");
+                            setEditPassword("");
+                            setError(null);
+                          }}
                           title="Edit Roles & Profile"
                           className="p-1 rounded hover:bg-slate-800 text-slate-400 hover:text-slate-200 transition cursor-pointer"
                         >
                           <Edit2 className="w-3.5 h-3.5" />
                         </button>
                         <button
-                          onClick={() => handleToggleStatus(emp)}
-                          title={emp.isActive ? "Deactivate User" : "Reactivate User"}
-                          className={`p-1 rounded hover:bg-slate-800 transition cursor-pointer ${
-                            emp.isActive
-                              ? "text-slate-400 hover:text-rose-400"
-                              : "text-slate-400 hover:text-emerald-400"
-                          }`}
+                          onClick={() => {
+                            setDeleteTarget(emp);
+                            setDeleteConfirmText("");
+                            setDeleteError(null);
+                          }}
+                          disabled={isSubmitting}
+                          title="Delete Employee"
+                          className="p-1 rounded hover:bg-rose-950/60 text-slate-400 hover:text-rose-400 transition cursor-pointer disabled:opacity-40"
                         >
-                          {emp.isActive ? (
-                            <UserX className="w-3.5 h-3.5" />
-                          ) : (
-                            <UserCheck className="w-3.5 h-3.5" />
-                          )}
+                          <Trash2 className="w-3.5 h-3.5" />
                         </button>
                       </div>
                     </td>
@@ -324,14 +347,14 @@ export function EmployeeTable({ initialEmployees }: EmployeeTableProps) {
                 </div>
                 <div className="space-y-1">
                   <label className="text-[11px] font-semibold text-slate-300">
-                    Email Address *
+                    Username or Email ID *
                   </label>
                   <input
-                    type="email"
+                    type="text"
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="ramesh@westeel.in"
+                    placeholder="e.g. sales3 or sales3@westeel.test"
                     className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-slate-100 text-xs focus:outline-none focus:border-amber-500"
                   />
                 </div>
@@ -379,43 +402,22 @@ export function EmployeeTable({ initialEmployees }: EmployeeTableProps) {
                 />
               </div>
 
-              {/* Roles Multi-Select Checkboxes */}
-              <div className="space-y-1.5 pt-1">
-                <label className="text-[11px] font-semibold text-slate-300 block">
-                  Assigned Operational Roles (Union of permissions applies)
-                </label>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 p-3 rounded-lg bg-slate-950/60 border border-slate-800">
-                  {APP_ROLES.map((role) => {
-                    const isChecked = selectedRoles.includes(role);
-                    return (
-                      <label
-                        key={role}
-                        className={`flex items-center gap-2 p-2 rounded-md border text-xs cursor-pointer transition ${
-                          isChecked
-                            ? "bg-amber-500/10 border-amber-500/40 text-slate-100"
-                            : "bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-300"
-                        }`}
-                      >
-                        <input
-                          type="checkbox"
-                          checked={isChecked}
-                          onChange={() => handleToggleRole(role)}
-                          className="sr-only"
-                        />
-                        <div
-                          className={`w-3.5 h-3.5 rounded flex items-center justify-center border ${
-                            isChecked
-                              ? "bg-amber-500 border-amber-500 text-slate-950"
-                              : "border-slate-700"
-                          }`}
-                        >
-                          {isChecked && <Check className="w-2.5 h-2.5 stroke-[3]" />}
-                        </div>
-                        <span className="font-medium">{ROLE_LABELS[role]}</span>
-                      </label>
-                    );
-                  })}
-                </div>
+              <div className="space-y-1 pt-1">
+                <label className="text-[11px] font-semibold text-slate-300 block">Role</label>
+                <select
+                  value={roleChoiceOf(selectedRoles)}
+                  onChange={(e) => {
+                    const c = ROLE_CHOICES.find((x) => x.value === e.target.value);
+                    setSelectedRoles(c ? [...c.roles] : []);
+                    if (c && (!designation || designation === "Staff")) setDesignation(c.label);
+                  }}
+                  className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-slate-100 text-xs focus:outline-none focus:border-amber-500"
+                >
+                  <option value="">Select role...</option>
+                  {ROLE_CHOICES.map((c) => (
+                    <option key={c.value} value={c.value}>{c.label}</option>
+                  ))}
+                </select>
               </div>
 
               <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
@@ -518,51 +520,53 @@ export function EmployeeTable({ initialEmployees }: EmployeeTableProps) {
                 />
               </div>
 
-              {/* Roles Multi-Select Checkboxes */}
-              <div className="space-y-1.5 pt-1">
-                <label className="text-[11px] font-semibold text-slate-300 block">
-                  Assigned Operational Roles
-                </label>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 p-3 rounded-lg bg-slate-950/60 border border-slate-800">
-                  {APP_ROLES.map((role) => {
-                    const isChecked = editingEmployee.roles.includes(role);
-                    return (
-                      <label
-                        key={role}
-                        className={`flex items-center gap-2 p-2 rounded-md border text-xs cursor-pointer transition ${
-                          isChecked
-                            ? "bg-amber-500/10 border-amber-500/40 text-slate-100"
-                            : "bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-300"
-                        }`}
-                      >
-                        <input
-                          type="checkbox"
-                          checked={isChecked}
-                          onChange={() => {
-                            const newRoles = isChecked
-                              ? editingEmployee.roles.filter((r) => r !== role)
-                              : [...editingEmployee.roles, role];
-                            setEditingEmployee({
-                              ...editingEmployee,
-                              roles: newRoles,
-                            });
-                          }}
-                          className="sr-only"
-                        />
-                        <div
-                          className={`w-3.5 h-3.5 rounded flex items-center justify-center border ${
-                            isChecked
-                              ? "bg-amber-500 border-amber-500 text-slate-950"
-                              : "border-slate-700"
-                          }`}
-                        >
-                          {isChecked && <Check className="w-2.5 h-2.5 stroke-[3]" />}
-                        </div>
-                        <span className="font-medium">{ROLE_LABELS[role]}</span>
-                      </label>
-                    );
-                  })}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <label className="text-[11px] font-semibold text-slate-300">
+                    Username or Email ID
+                  </label>
+                  <input
+                    type="text"
+                    value={editEmail}
+                    onChange={(e) => setEditEmail(e.target.value)}
+                    placeholder="e.g. sales1 or sales1@westeel.test"
+                    className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-slate-100 text-xs focus:outline-none focus:border-amber-500"
+                  />
                 </div>
+                <div className="space-y-1">
+                  <label className="text-[11px] font-semibold text-slate-300">
+                    New Password (Optional)
+                  </label>
+                  <input
+                    type="password"
+                    minLength={6}
+                    value={editPassword}
+                    onChange={(e) => setEditPassword(e.target.value)}
+                    placeholder="Leave blank to keep current"
+                    className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-slate-100 text-xs focus:outline-none focus:border-amber-500"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-1 pt-1">
+                <label className="text-[11px] font-semibold text-slate-300 block">Role</label>
+                {editingEmployee.roles.includes("director") ? (
+                  <div className="text-xs text-slate-300">{ROLE_LABELS.director}</div>
+                ) : (
+                  <select
+                    value={roleChoiceOf(editingEmployee.roles)}
+                    onChange={(e) => {
+                      const c = ROLE_CHOICES.find((x) => x.value === e.target.value);
+                      setEditingEmployee({ ...editingEmployee, roles: c ? [...c.roles] : [] });
+                    }}
+                    className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-slate-100 text-xs focus:outline-none focus:border-amber-500"
+                  >
+                    <option value="">Select role...</option>
+                    {ROLE_CHOICES.map((c) => (
+                      <option key={c.value} value={c.value}>{c.label}</option>
+                    ))}
+                  </select>
+                )}
               </div>
 
               <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
@@ -580,6 +584,86 @@ export function EmployeeTable({ initialEmployees }: EmployeeTableProps) {
                 >
                   {isSubmitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   <span>{isSubmitting ? "Updating..." : "Save Changes"}</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* DELETE EMPLOYEE CONFIRMATION MODAL (GITHUB STYLE) */}
+      {deleteTarget && (
+        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="w-full max-w-md rounded-xl border border-rose-900/40 bg-slate-900 p-6 space-y-4 shadow-2xl">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+              <h2 className="text-sm font-semibold text-rose-400 flex items-center gap-2">
+                <Trash2 className="w-4 h-4 text-rose-500" />
+                <span>Delete Employee Account</span>
+              </h2>
+              <button
+                type="button"
+                onClick={() => setDeleteTarget(null)}
+                className="text-slate-500 hover:text-slate-300 cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="p-3 rounded-lg bg-rose-950/30 border border-rose-900/50 text-rose-200 text-xs space-y-2">
+              <p className="font-semibold text-rose-300">
+                This action cannot be undone.
+              </p>
+              <p className="text-slate-400 leading-relaxed">
+                This will permanently delete the account of{" "}
+                <span className="font-semibold text-slate-100">{deleteTarget.fullName}</span>,
+                revoke their active sessions, and remove their system access.
+              </p>
+            </div>
+
+            {deleteError && (
+              <div className="p-3 rounded-lg bg-rose-950/40 border border-rose-900/60 text-rose-300 text-xs flex items-start gap-2">
+                <AlertCircle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
+                <span>{deleteError}</span>
+              </div>
+            )}
+
+            <form onSubmit={handleConfirmDelete} className="space-y-4">
+              <div className="space-y-2">
+                <label className="text-[11px] text-slate-300 block">
+                  To confirm, type{" "}
+                  <span className="font-mono font-semibold text-rose-300 select-all bg-slate-950 px-1.5 py-0.5 rounded border border-rose-900/60">
+                    {deleteTarget.fullName}
+                  </span>{" "}
+                  below:
+                </label>
+                <input
+                  type="text"
+                  autoFocus
+                  value={deleteConfirmText}
+                  onChange={(e) => setDeleteConfirmText(e.target.value)}
+                  placeholder={deleteTarget.fullName}
+                  className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-slate-100 text-xs focus:outline-none focus:border-rose-500 font-mono"
+                />
+              </div>
+
+              <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
+                <button
+                  type="button"
+                  onClick={() => setDeleteTarget(null)}
+                  className="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs transition cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={
+                    isSubmitting ||
+                    deleteConfirmText.trim() !== deleteTarget.fullName.trim()
+                  }
+                  className="px-4 py-2 rounded-lg bg-rose-600 hover:bg-rose-500 disabled:opacity-40 disabled:hover:bg-rose-600 disabled:cursor-not-allowed text-white font-semibold text-xs transition flex items-center gap-1.5 cursor-pointer shadow-lg shadow-rose-950/50"
+                >
+                  {isSubmitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                  <span>{isSubmitting ? "Deleting..." : "Permanently Delete"}</span>
                 </button>
               </div>
             </form>

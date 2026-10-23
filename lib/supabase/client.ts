@@ -6,5 +6,6 @@ export function createClient() {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!;
 
-  return createBrowserClient(supabaseUrl, supabaseKey);
+  // Admin-portal session lives in the ws_adm cookie; the banner is the only browser-side user.
+  return createBrowserClient(supabaseUrl, supabaseKey, { cookieOptions: { name: "ws_adm" } });
 }

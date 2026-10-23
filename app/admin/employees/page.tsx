@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { connection } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { EmployeeTable } from "./employee-table";
@@ -6,6 +7,7 @@ import { EmployeeProfile, AppRole } from "@/lib/auth/types";
 import { Loader2 } from "lucide-react";
 
 async function EmployeeContent() {
+  await connection();
   const supabase = await createClient();
   const adminSupabase = createAdminClient();
 
